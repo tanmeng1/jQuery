@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>       
+        #box{
+            border-radius: 2%;
+            width: 400px;            
+            left: 50%;
+            top: 50%;
+            position: absolute;
+            transform: translate(-50%,-50%);
+            background-color: rgb(233, 227, 227);
+        }
+        .box1{
+            text-align: center;
+        }
+        .box2{
+            color: rgb(65, 95, 230);
+           font-size: xx-small;
+           font-family: "宋体";
+        }
+
+    </style>
+    <script>
+        function toggleForm() {
+            var isLogin = document.getElementById("loginRadio").checked;
+            var registerForm = document.getElementById("registerForm");
+            var loginForm = document.getElementById("loginForm");
+            if (isLogin) {
+                registerForm.style.display = "none";
+                loginForm.style.display = "block";
+            } else {
+                registerForm.style.display = "block";
+                loginForm.style.display = "none";
+            }
+        }
+        </script>
+</head>
+<body>
+    <form action="#" id="loginForm">
+    <div id="box">
+        <p>请输入用户名：</p>
+        <input type="text" name="用户名" placeholder="请输入用户名...">
+        <p>请输入日期:</p>
+        <select name="生日">
+            <option>--请输入年--</option>
+            <option value="年">2000</option>
+            <option value="年">2001</option>
+            <option value="年">2002</option>
+        </select>
+        <select>
+            <option>--请输入月--</option>
+            <option value="月">1</option>
+            <option value="月">2</option>
+            <option value="月">3</option>
+        </select>
+        <select>
+            <option>--请输入日--</option>
+            <option value="日">1</option>
+            <option value="日">2</option>
+            <option value="日">3</option>
+        </select>
+        <p>请输入邮箱：</p>
+        <input type="email" name="邮箱" placeholder="请输入邮箱...">
+        <p>请输入密码：</p>
+        <input type="password" name="密码" placeholder="请输入密码...">
+        <p>请确认密码：</p>
+        <input type="password" name="密码" placeholder="请确认密码...">
+        <p><input type="button" name="登录" value="登录"></p>
+        <input type="radio" id="loginRadio" name="formSelect" onchange="toggleForm()" checked>
+        <label for="loginRadio">登录</label>
+        <input type="radio" id="registerRadio" name="formSelect" onchange="toggleForm()">
+        <label for="registerRadio">注册</label>
+        <p class="box2">注意：无账号请注册! <a href=""></a></p>
+  </form>
+    </div>
+  
+
+      <form action="#" id="registerForm" style="display: none;">
+    <div id="box" >
+        <p>请输入用户名：</p>
+        <input type="text" name="用户名" placeholder="请输入用户名...">
+        <p>请输入日期:</p>
+        <select name="生日">
+            <option>--请输入年--</option>
+            <option value="年">2000</option>
+            <option value="年">2001</option>
+            <option value="年">2002</option>
+        </select>
+        <select>
+            <option>--请输入月--</option>
+            <option value="月">1</option>
+            <option value="月">2</option>
+            <option value="月">3</option>
+        </select>
+        <select>
+            <option>--请输入日--</option>
+            <option value="日">1</option>
+            <option value="日">2</option>
+            <option value="日">3</option>
+        </select>
+        <p>请输入邮箱：</p>
+        <input type="email" name="邮箱" placeholder="请输入邮箱...">
+        <p>请输入密码：</p>
+        <input type="password" name="密码" placeholder="请输入密码...">
+        <p>请确认密码：</p>
+        <input type="password" name="密码" placeholder="请确认密码...">
+        <p><input type="button" name="注册" value="注册"></p>
+       
+        </form>  
+    </div>
+    
+
+
+</body>
+</html>
