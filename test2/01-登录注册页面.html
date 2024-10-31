@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录注册页面</title>
+  <script src="jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+  <div id="login-form" class="login">
+    <form action="#" method="post" id="login_form">
+      <h3>登录界面</h3><br>
+      <p>请输入用户名：</p>
+      <input type="username" id="username" name="用户名" placeholder="请输入用户名..." required>
+      <p>请输入密码：</p>
+      <input type="password" id="password" name="密码" placeholder="请输入密码..." required>
+      <p>
+        <button type="submit" class="login_btn" id="login_btn">登录</button>
+        <button type="button" class="login_btn" onclick="switchForm('register')">注册</button>
+      </p>
+      <p class="notice">注意：无账号请注册!</p>
+    </form>
+  </div>
+  <div>
+    <div id="register-form" class="login" style="display: none;">
+      <form action="#" method="post" id="register_form">
+        <h3>注册界面</h3>
+        <p>请输入用户名：</p>
+        <input type="username" id="reg_username" name="用户名" placeholder="请输入用户名..." required>
+        <p>请输入邮箱：</p>
+        <input type="email" id="reg_email" name="邮箱" placeholder="请输入邮箱..." required>
+        <p>请输入密码：</p>
+        <input type="password" id="reg_password" name="密码" placeholder="请输入密码..." required>
+        <p>请确认密码：</p>
+        <input type="password" id="reg_password2" name="密码" placeholder="请确认密码..." required>
+        <p>
+          <button type="submit" class="login_btn" id="register_submit_btn">注册</button>
+          <button type="button" class="login_btn" onclick="switchForm('login');">登录</button><br><br>
+          <button type="button" onclick="switchForm('login');" class="back_btn" >返回</button>
+        </p>
+      </form>
+    </div>
+  </div>
+</body>
+
+<script>
+
+  function usernameExists(username) {
+    return false;
+  }
+
+  function emailExists(email) {
+    return false;
+  }
+
+  function switchForm(formName) {
+    var loginForm = document.getElementById('login-form');
+    var registerForm = document.getElementById('register-form');
+    if (formName === 'login') {
+      loginForm.style.display = 'block';
+      registerForm.style.display = 'none';
+    } else if (formName === 'register') {
+      loginForm.style.display = 'none';
+      registerForm.style.display = 'block';
+    }
+  }
+
+  const body = document.body;
+  $("#login_btn").click(function (event) {
+    event.preventDefault(); 
+    let username = $('#username').val();
+    let password = $('#password').val();
+    let resText = ""; 
+
+    if (username === "") {
+      resText = "用户名不能为空";
+    } else if (password === "") {
+      resText = "密码不能为空";
+    } else if (usernameExists(username)) {
+      resText = "用户名已存在";
+    } else {
+      resText = "登录成功";
+    }
+
+    if (resText) {
+      let msg = $('<div class="msg">' + resText + '</div>');
+      $(body).append(msg);
+      setTimeout(function () {
+        msg.remove();
+      }, 3000);
+    }
+  });
+
+  $("#register_submit_btn").click(function (event) {
+    event.preventDefault();
+    let username = $('#reg_username').val();
+    let email = $('#reg_email').val();
+    let password = $('#reg_password').val();
+    let password2 = $('#reg_password2').val();
+    let resText = "";
+
+    if (username === "") {
+      resText = "用户名不能为空";
+    } else if (email === "") {
+      resText = "邮箱不能为空";
+    } else if (password === "") {
+      resText = "密码不能为空";
+    } else if (password!== password2) {
+      resText = "两次密码不一致";
+    } else if (usernameExists(username)) {
+      resText = "用户名已存在";
+    } else if (emailExists(email)) {
+      resText = "邮箱已存在";
+    } else {
+      resText = "注册成功";
+    }
+
+    if (resText) {
+      let msg = $('<div class="msg">' + resText + '</div>');
+      $(body).append(msg);
+      setTimeout(function () {
+        msg.remove();
+      }, 3000);
+    }
+  });
+</script>
+
+<style>
+  body {
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    background-image: linear-gradient(pink, #44b7c9);
+    background-size: cover;
+    flex: 1;
+    align-items: center;
+  }
+  .box1{
+        float: right;
+        margin-right: 50px;
+
+    }
+    .box1:hover{
+        box-shadow: 2px 2px 15px 2px rgb(190, 225, 255);
+        background-color: transparent;
+        color: white;
+        animation: login_mation 0.5s;
+    }
+.msg {
+    position: relative;
+    top: 10px;
+    right: 10px;
+    background-color: white;
+    color: pink;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 1000;
+    animation: msg_animation 1s;
+  }
+
+.notice {
+    color: rgb(194, 100, 100);
+    font-size: xx - small;
+    font-family: "宋体";
+  }
+
+.back_btn {
+    float: right;
+    margin-right: 50px;
+  }
+    .back_btn:hover{
+        box-shadow: 2px 2px 15px 2px rgb(190, 225, 255);
+        background-color: transparent;
+        color: white;
+        animation: login_mation 0.5s;
+    }
+
+.login {
+    text-align: center;
+    margin: 0 auto;
+    width: 600px;
+    height: 520px;
+    background-color: rgba(87, 86, 86, 0.2);
+    border-radius: 25px;
+    box-shadow: 5px 2px 35px -7px #ff9a9e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+.login h3 {
+    margin-top: 40px;
+    color: rgb(66, 129, 185);
+    font-weight: 100;
+  }
+
+.login_form {
+    padding: 20px;
+  }
+
+.login_form input {
+    background-color: transparent;
+    width: 320px;
+    padding: 2px;
+    text-indent: 2px;
+    color: white;
+    font-size: 20px;
+    height: 45px;
+    margin: 30px 30px 30px 5px;
+    outline: none;
+    border: 0;
+    border-bottom: 1px solid rgb(131, 220, 255);
+  }
+
+  input::placeholder {
+    color: #4bbe82;
+    font-weight: 100;
+    font-size: 14px;
+    font-style: italic;
+  }
+
+.login_btn {
+    background-color: rgba(255, 255, 255, 0.582);
+    border: 1px solid rgb(190, 225, 255);
+    padding: 10px;
+    width: 100px;
+    height: 40px;
+    border-radius: 30px;
+    font-size: 15px;
+    color: rgb(100, 183, 255);
+    font-weight: 100;
+    margin-top: 15px;
+  }
+
+.login_btn:hover {
+    box-shadow: 2px 2px 15px 2px rgb(190, 225, 255);
+    background-color: transparent;
+    color: white;
+    animation: login_mation 0.5s;
+  }
+
+  @keyframes login_mation {
+    from {
+      background-color: rgba(255, 255, 255, 0.582);
+      box-shadow: 0px 0px 15px 2px rgb(190, 225, 255);
+    }
+    to {
+      background-color: transparent;
+      color: white;
+      box-shadow: 2px 2px 15px 2px rgb(190, 225, 255);
+    }
+  }
+</style>
+
+</html>
