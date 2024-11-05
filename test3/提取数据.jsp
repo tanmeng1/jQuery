@@ -43,7 +43,7 @@
     </div>
 </div>
 
-<script src="test.js"></script>
+<script src="jquery-3.6.0.min.js"></script>
 <script>
     $.ajax({
         url:'http://jsonplaceholder.typicode.com/posts',
