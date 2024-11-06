@@ -55,7 +55,7 @@
                 console.log(item)
                 $('#list').append("\<div class=\"list-item\"\>\<span class=\"title\">" + item.id +
                     "\</span>\<span class=\"title\">" + item.userId + "\</span>\<span class=\"title\">" + item.body +
-                    "\</span>\<span class=\"title'>\<h1\>" + item.title + "\<\/\h1\>");
+                    "\</span\>\<span class=\"title\"\> "+ item.title +"\</span>\</div\>")
             })
         },
         error:function(xhr,status,error) {
@@ -65,4 +65,7 @@
     });
 
 </script>
+
+
+
 
