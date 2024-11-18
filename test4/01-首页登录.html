@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学生信息管理系统</title>   
+    <script src="jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="head">
+        学生信息管理系统 v 1.0
+            <div class="box1">
+            系统公告 |
+            使用帮助 |
+            联系我们
+        </div>
+        <div class="userInfo">
+            TM
+            <div class="user_menu">
+                <p>个人中心</p>
+                <p>修改密码</p>
+                <p>退出登录</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="menu">
+            <ul>
+
+                <li>
+                    <a href="#about" class="menu-item">＋ 学生信息管理</a>
+                    <ul class="submenu">
+                                <li id="studentInfoManagement"><a href="#">添加学生信息</a></li>
+                                <li id="meun1"><a href="#">查看学生信息</a></li>                               
+                                <li><a href="#">修改学生信息</a></li>
+                                <li><a href="#">删除学生信息</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#home" class="menu-item">＋ 成绩管理</a>
+                    <ul class="submenu">
+                        <li><a href="#">查看成绩</a></li>
+                        <li><a href="#">添加成绩</a></li>
+                        <li><a href="#">修改成绩</a></li>
+                        <li><a href="#">删除成绩</a></li>
+                    </ul>
+               </li>
+                <li>
+                    <a href="#contact" class="menu-item">＋ 班级管理</a>
+                    <ul class="submenu">
+                                <li><a href="#">查看班级信息</a></li>
+                                <li><a href="#">添加班级信息</a></li>
+                                <li><a href="#">修改班级信息</a></li>
+                                <li><a href="#">删除班级信息</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#contact" class="menu-item">＋ 课程管理</a>
+                    <ul class="submenu">
+                                <li><a href="#">查看课程信息</a></li>
+                                <li><a href="#">添加课程信息</a></li>
+                                <li><a href="#">修改课程信息</a></li>
+                                <li><a href="#">删除课程信息</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+        
+        <div id="content">
+            <div id="box2">
+                   <h2>添加学生信息 </h2>
+    <form id="studentForm">
+        <label for="name">姓名:</label>
+        <input type="text" id="name" required>
+        <br>
+        <label for="sex">性别:</label>
+        <input type="text" id="sex" required>
+        <br>
+        <label for="age">年龄:</label>
+        <input type="number" id="age" required>
+        <br>
+        <label for="grade">年级:</label>
+        <input type="text" id="grade" required>
+        <br>
+        <button type="submit" id="addStudent">添加学生</button>
+    </form> 
+
+     <h2>学生列表</h2>
+    <table id="studentTable">
+        <thead>
+            <tr>
+                <th>姓名</th>
+                <th>性别</th>
+                <th>年龄</th>
+                <th>年级</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+          
+        </tbody>
+    </table> 
+            <!-- </div>
+            <div id = "box3">
+                222
+            </div>
+
+        </div> -->
+    </div>   
+
+    <script>
+        $(document).ready(function() {
+            $('.menu-item').click(function(event) {
+                event.preventDefault(); // 防止链接跳转
+                $(this).next('.submenu').slideToggle(); // 显示或隐藏子菜单
+            });
+        }); 
+        
+    </script>
+
+<script>
+    $(document).ready(function() {
+        $('#studentInfoManagement').click(function() {
+            $('#box2').toggle(); // 在每次点击时切换显示状态
+        });
+    });
+    
+    // $(document).ready(function() {
+    //     $('#meun1').click(function() {
+    //         $('#box3').toggle(); // 在每次点击时切换显示状态
+    //     });
+    // });
+
+</script>
+
+
+
+     <script>
+
+        const form = document.getElementById('studentForm');
+        const studentTableBody = document.getElementById('studentTable').getElementsByTagName('tbody')[0];
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const sex = document.getElementById('sex').value;
+            const age = document.getElementById('age').value;
+            const grade = document.getElementById('grade').value;
+
+            const newRow = studentTableBody.insertRow();
+            newRow.innerHTML = `
+                <td>${name}</td>
+                <td>${sex}</td>
+                <td>${age}</td>
+                <td>${grade}</td>
+                <td><button onclick="deleteStudent(this)">删除</button></td>
+            `;
+
+            form.reset();
+    });
+        function deleteStudent(button) {
+            const row = button.parentElement.parentElement;
+            studentTableBody.deleteRow(row.rowIndex - 1);
+        }
+       
+    </script> 
+
+<style>
+    
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+    body {
+        background-color: #f7e5f6; 
+        font-family: Arial, sans-serif;
+    }
+    .box1 {
+        color: #3555e3;
+        font-size: 14px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 30px;
+        border: 1px solid #ffffff;
+        position: absolute;
+        top: 25px;
+        right: 100px;
+        padding: 0 10px;
+        border-radius: 5px;
+    }
+    .head {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 60px;
+        background: linear-gradient(45deg, #9ccc7f, #f7e5f6);
+        color: #ffffff;
+        font-size: 28px;
+        position: relative;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .userInfo { 
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #e797e2, #eaeee8);
+        position: absolute;
+        right: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer; 
+    }
+    .user_menu {
+        width: 100px; /* 调整宽度 */
+        display: none;
+        background-color: thistle;
+        color: black;
+        position: absolute;
+        top: 54px;
+        right: 0;
+        font-size: 12px;
+        padding: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        border-radius: 5px; /* 圆角 */
+    }
+    .userInfo:hover .user_menu {
+        display: block;
+    }
+    .user_menu p {
+        margin: 0;
+        padding: 5px;
+        text-align: center;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    .user_menu p:hover {
+        background-color: #c09de5; 
+    }
+
+    .container {
+        display: flex;
+        height: calc(100vh - 60px); 
+    }
+    .menu {
+        background: linear-gradient(45deg, #f7e5f6, #a7c992);
+        flex: 1; 
+        padding: 20px; 
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        border-right: 2px solid #eaeaea; /* 添加分隔线 */
+    }
+    .menu ul {
+        list-style-type: none; 
+    }
+    .menu li {
+        margin: 10px 0; 
+    }
+    .menu a {
+        display: block;
+        padding: 10px;
+        color: #4a4a4a;
+        text-decoration: none;
+        transition: background-color 0.3s;
+    }
+    .menu a:hover {
+        color: #b181de; 
+        background-color: #e0e0e0; /* 悬停背景色 */
+}
+    .submenu {
+        display: none; 
+        padding-left: 20px; 
+    } 
+    #content {
+        background: linear-gradient(45deg, #ccdbc4, #e8dce8);
+        flex: 7; 
+        padding: 20px; 
+        color: #4a4a4a; /* 内容字体颜色 */
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.1); /* 内阴影效果 */
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+    th, td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    form {
+        margin-bottom: 20px;
+    }
+    h2 {
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 40px;
+        background-color: #f2f2f2;
+        color: #4a4a4a;
+        font-size: 20px;
+        border-radius: 5px; 
+        padding: 0 10px;
+    }
+    #addStudent {
+        margin: 10px 0;
+        padding: 5px 10px;
+        border-radius: 5px;
+        border: 1px solid #ffffff;
+        color: black;
+        font-size: 8px;
+        cursor: pointer;
+        margin-left: 40px;
+    }
+    #addStudent:hover {
+        background-color: #a7c992; /* 悬停效果 */
+
+
+    }
+    #studentTable th{  
+        background-color: #f2f2f2;
+        color: #4a4a4a;
+        font-size: 16px;
+        text-align: center; 
+
+    }
+
+</style>
+
+</body>
+</html>
