@@ -5,326 +5,865 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>学生信息管理系统</title>   
     <script src="jquery-3.6.0.min.js"></script>
+    <script src="mock.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
     <div class="head">
         学生信息管理系统 v 1.0
-            <div class="box1">
+        <div class="box1">
+            教务中心 |
             系统公告 |
-            使用帮助 |
             联系我们
         </div>
         <div class="userInfo">
             TM
             <div class="user_menu">
                 <p>个人中心</p>
-                <p>修改密码</p>
+                <p id="openModalBtn">修改密码</p>
                 <p>退出登录</p>
-            </div>
+            </div>               
+        </div> 
+    </div>
+
+    <!-- 修改密码弹窗 -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>修改信息</h2>
+            <label for="newName">新名字：</label><input type="text" id="newName" placeholder="请输入新名字"><br><br>
+            <label for="newPassword">新密码：</label><input type="password" id="newPassword" placeholder="请输入新密码"><br><br>
+            <label for="confirmPassword">确认密码：</label><input type="password" id="confirmPassword" placeholder="请确认密码"><br><br>
+            <p id="errorMsg" style="color:red; font-size: 10px;">注意：请确认新密码，密码必须包含字母、数字、特殊字符，长度在8-16位之间。</p>
+            <button id="submitBtn">提交修改</button>
         </div>
     </div>
+
+    <!-- 添加学生弹窗 -->
+    <div id="addStudentModal" class="modal">
+        <div class="modal-content">
+            <span class="close1">&times;</span>
+            <h2>添加学生</h2>
+            <label for="studentName">姓名：</label> <input type="text" id="studentName" placeholder="请输入姓名"><br><br>
+            <label for="gender">性别：</label><input type="text" id="gender" placeholder="请输入性别"><br><br>
+            <label for="age">年龄：</label><input type="text" id="age" placeholder="请输入年龄"><br><br>
+            <label for="class">班级：</label> <input type="text" id="class" placeholder="请输入班级"><br><br>
+            <button id="addStudentSubmit">提交</button>
+        </div>
+    </div>
+    
 
     <div class="container">
         <div class="menu">
             <ul>
-
+                    <li>
+                        <a href="#personalCenter" class="menu-item">＋ 个人中心</a>
+                        <ul class="submenu">
+                            <li id="myInfo"><a href="#myInfo">我的信息</a></li>
+                            <li id="classInfo"><a href="#classInfo">班级信息</a></li>
+                        </ul> 
+                    </li>
+                    <li>
+                        <a href="#home" class="menu-item">＋ 教务中心</a>
+                        <ul class="submenu">
+                            <li id="myAdmissions"><a href="#myAdmissions">我的报考</a></li>
+                            <li id="myGrades"><a href="#myGrades">我的成绩</a></li>
+                            <li id="myBooks"><a href="#myBooks">我的书籍</a></li>
+                        </ul>
+                    </li>
                 <li>
-                    <a href="#about" class="menu-item">＋ 学生信息管理</a>
+                    <a href="#contact" class="menu-item">＋ 学习中心</a>
                     <ul class="submenu">
-                                <li id="studentInfoManagement"><a href="#">添加学生信息</a></li>
-                                <li id="meun1"><a href="#">查看学生信息</a></li>                               
-                                <li><a href="#">修改学生信息</a></li>
-                                <li><a href="#">删除学生信息</a></li>
+                        <li id = "myCourses"><a href="#myCourses">我的课程</a></li>
+                        <li id="myAssignments"><a href="#">我的作业</a></li>
+                        <li id="myExams"><a href="#">我的考试</a></li>
                     </ul>
                 </li>
                 <li>
-                    <a href="#home" class="menu-item">＋ 成绩管理</a>
+                    <a href="#contact" class="menu-item">＋ 财务中心</a>
                     <ul class="submenu">
-                        <li><a href="#">查看成绩</a></li>
-                        <li><a href="#">添加成绩</a></li>
-                        <li><a href="#">修改成绩</a></li>
-                        <li><a href="#">删除成绩</a></li>
-                    </ul>
-               </li>
-                <li>
-                    <a href="#contact" class="menu-item">＋ 班级管理</a>
-                    <ul class="submenu">
-                                <li><a href="#">查看班级信息</a></li>
-                                <li><a href="#">添加班级信息</a></li>
-                                <li><a href="#">修改班级信息</a></li>
-                                <li><a href="#">删除班级信息</a></li>
+                            <li id="myFinance"><a href="#">我的财务</a></li>
                     </ul>
                 </li>
-                <li>
-                    <a href="#contact" class="menu-item">＋ 课程管理</a>
-                    <ul class="submenu">
-                                <li><a href="#">查看课程信息</a></li>
-                                <li><a href="#">添加课程信息</a></li>
-                                <li><a href="#">修改课程信息</a></li>
-                                <li><a href="#">删除课程信息</a></li>
-                    </ul>
-                </li>
-
             </ul>
         </div>
         
         <div id="content">
-            <div id="box2">
-                   <h2>添加学生信息 </h2>
-    <form id="studentForm">
-        <label for="name">姓名:</label>
-        <input type="text" id="name" required>
-        <br>
-        <label for="sex">性别:</label>
-        <input type="text" id="sex" required>
-        <br>
-        <label for="age">年龄:</label>
-        <input type="number" id="age" required>
-        <br>
-        <label for="grade">年级:</label>
-        <input type="text" id="grade" required>
-        <br>
-        <button type="submit" id="addStudent">添加学生</button>
-    </form> 
-
-     <h2>学生列表</h2>
-    <table id="studentTable">
-        <thead>
-            <tr>
-                <th>姓名</th>
-                <th>性别</th>
-                <th>年龄</th>
-                <th>年级</th>
-                <th>操作</th>
-            </tr>
-        </thead>
-        <tbody>
-          
-        </tbody>
-    </table> 
-            </div>
-        </div>
-    </div>   
-
+            <h2>欢迎使用学生信息管理系统</h2><p>请选择左侧菜单。</p>
+    
+    </div>  
+    
     <script>
         $(document).ready(function() {
             $('.menu-item').click(function(event) {
-                event.preventDefault(); // 防止链接跳转
-                $(this).next('.submenu').slideToggle(); // 显示或隐藏子菜单
+                event.preventDefault(); 
+                $(this).next('.submenu').slideToggle(); 
             });
-        }); 
-        
-    </script>
 
-<script>
-    $(document).ready(function() {
-        $('#studentInfoManagement').click(function() {
-            $('#box2').toggle(); // 在每次点击时切换显示状态
+            $('.menu').on('click', '.submenu li a', function(event) {
+                event.preventDefault();
+                const contentId = $(this).parent().attr('id');
+                let contentHtml = "";
+
+                switch (contentId) {
+                    case "myInfo":
+                        contentHtml = `<p class='box3'>我的信息</p>
+                                       <div class='box2'>个人资料：<br><br>姓名：张三<br>性别：男<br>年龄：20<br>班级：2019级软件技术4班<br>
+                                        联系方式：13812345678</div>
+                                        <div class='box2'>班级资料：<br><br>班名：2019级软件技术4班<br>班主任：李四<br>人数：20人<br></div>
+                                        <div class='box2'>短信息：<br><br>暂无！</div>
+                                        <div class='box2'>我的异议: <br><br>暂无！</div>`     
+                        break;
+                    case "classInfo": 
+                         contentHtml = `
+                         
+                    <h2>班级信息<button id='addStudent'>添加学生</button></h2>
+                    <table id='studentTable'>
+                        <thead>
+                            <tr>
+                                <th>姓名</th>
+                                <th>性别</th>
+                                <th>年龄</th>
+                                <th>年级</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>杜勇</td>
+                                <td>男</td>
+                                <td>20</td>
+                                <td>2019级软件技术4班</td>
+                                <td><button onclick='deleteStudent(this)'>删除</button></td>
+                            </tr>
+                            <tr>
+                                <td>康霞</td>
+                                <td>女</td>
+                                <td>21</td>
+                                <td>2019级软件技术4班</td>
+                                <td><button onclick='deleteStudent(this)'>删除</button></td>
+                            </tr>
+                            <tr>
+                                <td>万秀英</td>
+                                <td>女</td>
+                                <td>22</td>
+                                <td>2019级软件技术4班</td>
+                                <td><button onclick='deleteStudent(this)'>删除</button></td>
+                            </tr>
+                            <tr>
+                                <td>程强</td>
+                                <td>男</td>
+                                <td>23</td>
+                                <td>2019级软件技术4班</td>
+                                <td><button onclick='deleteStudent(this)'>删除</button></td>
+                            </tr>
+                            <tr>
+                                <td>崔超</td>
+                                <td>男</td>
+                                <td>24</td>
+                                <td>2019级软件技术4班</td>
+                                <td><button onclick='deleteStudent(this)'>删除</button></td>
+                            </tr>
+                            <tr>
+                                <td>王晓红</td>
+                                <td>女</td>
+                                <td>25</td>
+                                <td>2019级软件技术4班</td>
+                                <td><button onclick='deleteStudent(this)'>删除</button></td>
+                            </tr>
+                            <tr>
+                                <td>宋勇</td>
+                                <td>男</td>
+                                <td>26</td>
+                                <td>2019级软件技术4班</td>
+                                <td><button onclick='deleteStudent(this)'>删除</button></td>
+                            </tr>
+                              <tr>
+                     <td>于静</td>
+                     <td>女</td>
+                     <td>20</td>
+                     <td>2019级软件技术4班</td>
+                     <td><button onclick="deleteStudent(this)">删除</button></td>
+                 </tr>
+                 <tr>
+                    <td>龙明</td>
+                     <td>男</td>
+                     <td>21</td>
+                     <td>2019级软件技术4班</td>
+                     <td><button onclick="deleteStudent(this)">删除</button></td>
+                 </tr>
+                 <tr>
+                     <td>康勇</td>
+                     <td>男</td>
+                     <td>22</td>
+                     <td>2019级软件技术4班</td>
+                     <td><button onclick="deleteStudent(this)">删除</button></td>
+                 </tr>
+                 <tr>
+                     <td>唐桂英</td>
+                     <td>男</td>
+                     <td>23</td>
+                     <td>2019级软件技术4班</td>
+                     <td><button onclick="deleteStudent(this)">删除</button></td>
+                 </tr>
+
+                        </tbody>
+                    </table>`;
+
+                        break;
+                    case "myAdmissions":
+                        contentHtml = `<p class='box3'>我的报考</p>
+                        <div class='box6'>注意：请仔细核对报考信息，如有错误请联系管理员。</div>
+                        <table>
+                            <thead >
+                            <tr>
+                                <th>报考时间</th>
+                                <th>报考编号</th>
+                                <th>报考科目</th>
+                                <th>状态</th>
+                            </tr>
+                            </thead>
+                            <tr>
+                                <td>2024-01-01</td>
+                                <td>2021001</td>
+                                <td>计算机科学与技术</td>
+                                <td>已通过</td>                                
+                            </tr>
+                            <tr>
+                                <td>2023-1-22</td>
+                                <td>2020002</td>
+                                <td>软件技术</td>
+                                <td>已通过</td>                                
+                            </tr>
+                            <tr>
+                                <td>2022-01-12</td>
+                                <td>2019003</td>
+                                <td>web前端框架</td>
+                                <td>已通过</td>                                
+                            </tr>
+                            <tr>
+                                <td>2021-01-23</td>
+                                <td>2018004</td>
+                                <td>网络配置与管理</td>
+                                <td>已通过</td>     
+                            </tr>                           
+                        </table> `                
+                        break;
+                    case "myGrades":
+                        contentHtml = `<h2>我的成绩</h2>
+                        <div class="box6">注意：请仔细核对成绩信息，如有错误请联系管理员。</div>
+                        <table>
+                            <thead >
+                            <tr>
+                                <th>课程名称</th>
+                                <th>学分</th>
+                                <th>课程性质</th>
+                                <th>成绩</th>
+                            </tr>
+                            </thead>
+                            <tr>
+                                <td>计算机网络</td>
+                                <td>3</td>
+                                <td>必修</td>
+                                <td>95</td>                                
+                            </tr>
+                            <tr>
+                                <td>软件工程</td>
+                                <td>3</td>
+                                <td>必修</td>
+                                <td>90</td>                                
+                            </tr>
+                            <tr>
+                                <td>web前端开发</td>
+                                <td>3</td>
+                                <td>必修</td>
+                                <td>85</td>                                
+                            </tr>
+                            <tr>
+                                <td>数据库原理</td>
+                                <td>3</td>
+                                <td>必修</td>
+                                <td>80</td>     
+                            </tr>                           
+                        </table> `
+                        break;
+                    case "myBooks":
+                        contentHtml = `
+                        
+                        <h2>我的书籍</h2>
+                        <div class="box6">注意：请仔细核对书籍信息，如有错误请联系管理员。</div>
+                         <table>
+                            <thead >
+                            <tr>
+                                <th>编号</th>
+                                <th>书籍名称</th>
+                                <th>发放数量</th>
+                                <th>发售日期</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tr>
+                                <td>1</td>
+                                <td>计算机科学与技术</td>
+                                <td>10</td>
+                                <td>2021-01-01</td>
+                                <td><button onclick='deleteBook(this)'>删除</button></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>软件技术</td>
+                                <td>10</td>
+                                <td>2020-1-22</td>
+                                <td><button onclick='deleteBook(this)'>删除</button></td>                               
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>web前端框架</td>
+                                <td>10</td>
+                                <td>2019-1-12</td>
+                                <td><button onclick='deleteBook(this)'>删除</button></td>                               
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>网络配置与管理</td>
+                                <td>20</td>
+                                <td>2018-1-23</td>
+                                <td><button onclick='deleteBook(this)'>删除</button></td>                               
+                            </tr>   
+                            <tr>
+                                <td>5</td>
+                                <td>数据库原理</td>
+                                <td>10</td>
+                                <td>2021-01-01</td>
+                                <td><button onclick='deleteBook(this)'>删除</button></td>                               
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>操作系统原理</td>
+                                <td>10</td>
+                                <td>2020-1-22</td>
+                                <td><button onclick='deleteBook(this)'>删除</button></td>                               
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>马克思主义原理</td>
+                                <td>10</td>
+                                <td>2019-1-12</td>
+                                <td><button onclick='deleteBook(this)'>删除</button></td>                               
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>计算机网络原理</td>
+                                <td>20</td>
+                                <td>2018-1-23</td>
+                                <td><button onclick='deleteBook(this)'>删除</button></td>                               
+                            </tr>   
+                        </table>
+                        `;
+                        break;
+                            case "myCourses":
+                                contentHtml = `
+                                <h2>我的课程</h2>
+                                <div class="box6">注意：请仔细核对课程信息，如有错误请联系管理员。</div>
+                                <table>
+                                    <thead >
+                                    <tr>
+                                        <th>课程名称</th>
+                                        <th>开课时间</th>
+                                        <th>结束时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tr>
+                                        <td>计算机网络</td>
+                                        <td>2021-01-01</td>
+                                        <td>2021-05-31</td>
+                                        <td><button onclick='deleteCourse(this)'>删除</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>软件工程</td>
+                                        <td>2020-1-22</td>
+                                        <td>2020-5-31</td>
+                                        <td><button onclick='deleteCourse(this)'>删除</button></td>                               
+                                    </tr>
+                                    <tr>
+                                        <td>web前端开发</td>
+                                        <td>2019-1-12</td>
+                                        <td>2019-5-31</td>
+                                        <td><button onclick='deleteCourse(this)'>删除</button></td>                               
+                                    </tr>
+                                    <tr>
+                                        <td>数据库原理</td>
+                                        <td>2018-1-23</td>
+                                        <td>2018-5-31</td>
+                                        <td><button onclick='deleteCourse(this)'>删除</button></td>                               
+                                    </tr>   
+                                </table>
+                                `;
+                                break;
+                            case "myAssignments":
+                                contentHtml = `
+                                <h2>我的作业</h2>
+                                <div class="box6">注意：请仔细核对作业信息，如有错误请联系管理员。</div>
+                                <table>
+                                    <thead >
+                                    <tr>
+                                        <th>作业名称</th>
+                                        <th>发布时间</th>
+                                        <th>截止时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tr>
+                                        <td>作业1</td>
+                                        <td>2021-01-01</td>
+                                        <td>2021-05-31</td>
+                                        <td><button onclick='deleteAssignment(this)'>删除</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>作业2</td>
+                                        <td>2020-1-22</td>
+                                        <td>2020-5-31</td>
+                                        <td><button onclick='deleteAssignment(this)'>删除</button></td>                                       
+                                    </tr>`
+                                break;
+                            case "myExams":
+                                        contentHtml = `
+                                        <h2>我的考试</h2>
+                                        <div class="box6">暂无！</div>`
+                                        break;
+                            case "myFinance":
+                                        contentHtml = `
+                                        <h2>我的财务</h2>
+                                        <div class="box6">注意：请仔细核对财务信息，如有错误请联系管理员。</div>
+                                        <table>
+                                            <thead >
+                                                <tr>
+                                                    <th>总缴费统计</th>
+                                                    <th>应缴费</th>
+                                                    <th>实缴费</th>
+                                                    <th>欠款</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>2021-01-01至2021-12-31</td>
+                                                    <td>10000</td>
+                                                    <td>9000</td>
+                                                    <td>1000</td>
+                                                </tr>
+                                            </thead>`
+                                        break;
+
+                    default:
+                        contentHtml = "<h2>欢迎使用学生信息管理系统</h2><p>请选择左侧菜单。</p>";
+                }
+
+                $('#content').html(contentHtml);
+
+                // 添加学生事件
+                $('#addStudent').off('click').on('click', function() {
+                    $('#addStudentModal').show();
+                });
+            });
+
+            // 弹窗功能
+            const modal = $('#modal');
+            const openModalBtn = $('#openModalBtn');
+
+            openModalBtn.on('click', function() {
+                modal.show();
+            });
+
+            $('.close, .close1').on('click', function() {
+                modal.hide();
+                $('#addStudentModal').hide();
+                $('#studentForm').hide();
+            });
+
+            $(window).on('click', function(event) {
+                if (event.target === modal[0] || event.target === $('#addStudentModal')[0] || event.target === $('#studentForm')[0]) {
+                    modal.hide();
+                    $('#addStudentModal').hide();
+                    $('#studentForm').hide();
+                }
+            });
+
+            $('#submitBtn').on('click', function() {
+                const newName = $('#newName').val();
+                const newPassword = $('#newPassword').val();
+                const confirmPassword = $('#confirmPassword').val();
+                
+                // 添加简单的错误处理
+                if (!newName || !newPassword || newPassword !== confirmPassword) {
+                    alert('请检查输入，确保新密码与确认密码一致！');
+                    return;
+                }
+
+                console.log('新名字:', newName, '新密码:', newPassword);
+                modal.hide();
+            }); 
+
+            $('#addStudentSubmit').on('click', function() {
+                const studentName = $('#studentName').val();
+                if (!studentName) {
+                    alert('姓名不能为空！');
+                    return;
+                }
+                const gender = $('#gender').val();
+                if (!gender) {
+                    alert('性别不能为空！');
+                    return;
+                }
+                const age = $('#age').val();
+                if (!age) {
+                    alert('年龄不能为空！');
+                    return;
+                }
+                const class_ = $('#class').val();
+                if (!class_) {
+                    alert('班级不能为空！');
+                    return;
+                }
+                // 在这里可以添加逻辑将新学生添加到数据中
+                console.log('添加学生姓名:', studentName);
+                $('#addStudentModal').hide();
+            });
         });
-    });
-</script>
 
-
-
-     <script>
-
-        const form = document.getElementById('studentForm');
-        const studentTableBody = document.getElementById('studentTable').getElementsByTagName('tbody')[0];
-
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const name = document.getElementById('name').value;
-            const sex = document.getElementById('sex').value;
-            const age = document.getElementById('age').value;
-            const grade = document.getElementById('grade').value;
-
-            const newRow = studentTableBody.insertRow();
-            newRow.innerHTML = `
-                <td>${name}</td>
-                <td>${sex}</td>
-                <td>${age}</td>
-                <td>${grade}</td>
-                <td><button onclick="deleteStudent(this)">删除</button></td>
-            `;
-
-            form.reset();
-    });
         function deleteStudent(button) {
             const row = button.parentElement.parentElement;
-            studentTableBody.deleteRow(row.rowIndex - 1);
+            row.parentNode.removeChild(row);
         }
-       
-    </script> 
+    </script>
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #f7e5f6; 
+            font-family: Arial, sans-serif;
+        }
+        .box-title {
+            margin-bottom: 20px;
+            text-align: center;
+            color: #4a4a4a;
+        }
+        .box2 {
+            font-size: 14px;
+            padding: 60px 40px 60px 40px;
+            float: left;
+            margin-left: 250px;
+            background-color: #bbd0a6;
+            width: 250px;
+            height: 250px;
+            border-radius: 2px;
+            border: solid 1px #ccc;
+            margin-bottom: 20px;
+            color: #4a4a4a;
+        }
+        .box5 {
+            background-color: #a7c992;
+            color: #4a4a4a;
+
+        }
+        .box6 {
+            padding: 10px;
+            font-size: 14px;
+            color: red;
+        }
+        .box3 {
+            border: #7fc470 solid 1px;
+            padding: 10px;
+            width: 100px;
+            text-align: center;
+            border-radius: 30px;
+            margin-bottom: 20px;
+            color: #4a4a4a;
+        }
+        .box4 input[type="text"] {
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            width: 200px;
+        }
+        .box4 button {
+            background-color: #7fc470;
+            color: #ffffff;
+            border: none;
+            padding: 6px 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .form-group {
+             background-color: #fefefe;
+             margin: 15% auto;
+             padding: 40px;
+             border: 1px solid #888;
+             width: 40%; 
+             height: 50%;
+             border-radius: 5px;
+         }
+        .close1 {
+             color: #aaa;
+             float: right;
+             font-size: 28px;
+             font-weight: bold;
+         }
+        .close1:hover,
+        .close1:focus {
+             color: black;
+             text-decoration: none;
+             cursor: pointer;
+         }
 
 
+        
 
+        .box{
+            width: 400px;
+            height: 600px;
+            background-color: aqua;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            text-align: center;
+            transform: translate(-50%, -50%);
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }   
+        .box span{
+            padding: 10px;
+        }
+        .box1 {
+            color: #3555e3;
+            font-size: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 30px;
+            border: 1px solid #ffffff;
+            position: absolute;
+            top: 25px;
+            right: 100px;
+            padding: 0 10px;
+            border-radius: 5px;
+        }
+        #submitBtn {
+            margin: 5px;
+            background-color: #3555e3;
+            color: #ffffff;
+            border: none;
+            padding: 6px 8px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .head {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 60px;
+            background: linear-gradient(45deg, #9ccc7f, #f7e5f6);
+            color: #ffffff;
+            font-size: 28px;
+            position: relative;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .userInfo { 
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #e797e2, #eaeee8);
+            position: absolute;
+            right: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer; 
+        }
+        .user_menu {
+            width: 100px;
+            display: none;
+            background-color: thistle;
+            color: black;
+            position: absolute;
+            top: 54px;
+            right: 0;
+            font-size: 12px;
+            padding: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+        .userInfo:hover .user_menu {
+            display: block;
+        }
+        .user_menu p {
+            margin: 0;
+            padding: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .user_menu p:hover {
+            background-color: #c09de5; 
+        }
+        .container {
+            display: flex;
+            height: calc(100vh - 60px); 
+        }
+        .menu {
+            background: linear-gradient(45deg, #f7e5f6, #a7c992);
+            flex: 1; 
+            padding: 20px; 
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            border-right: 2px solid #eaeaea; 
+        }
+        .menu ul {
+            list-style-type: none; 
+        }
+        .menu li {
+            margin: 10px 0; 
+        }
+        .menu a {
+            display: block;
+            padding: 10px;
+            color: #4a4a4a;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .menu a:hover {
+            color: #b181de; 
+            background-color: #e0e0e0; 
+        }
+        .submenu {
+            display: none; 
+            padding-left: 20px; 
+        } 
+        #content {
+            background: linear-gradient(45deg, #ccdbc4, #e8dce8);
+            flex: 7; 
+            padding: 20px; 
+            color: #4a4a4a;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1); 
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        h2 {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 40px;
+            background-color: #f2f2f2;
+            color: #4a4a4a;
+            font-size: 20px;
+            border-radius: 5px; 
+            padding: 0 10px;
+        }
+        #addStudent {
+            margin: 10px 0;
+            padding: 5px 10px;
+            border-radius: 5px;
+            background-color: #7fc470;
+            border: 1px solid #ffffff;
+            color: black;
+            font-size: 8px;
+            cursor: pointer;
+            margin-left: 40px;
+        }
+        #addStudent:hover {
+            background-color: #9acf98; 
+        }
+        #studentTable th{  
+            background-color: #bed7bd;
+            color: #4a4a4a;
+            font-size: 16px;
+            text-align: center; 
+        }
+        
+        /* 弹窗样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 30%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .studentForm {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        .form-group {
+             background-color: #fefefe;
+             margin: 15% auto;
+             padding: 40px;
+             border: 1px solid #888;
+             width: 40%; 
+             height: 50%;
+             border-radius: 5px;
+         }
+        .close1 {
+             color: #aaa;
+             float: right;
+             font-size: 28px;
+             font-weight: bold;
+         }
+        .close1:hover,
+        .close1:focus {
+             color: black;
+             text-decoration: none;
+             cursor: pointer;
+         }
+
+    </style>
 </body>
-<style>
-    
-    * {
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-    }
-    body {
-        background-color: #f7e5f6; 
-        font-family: Arial, sans-serif;
-    }
-    .box1 {
-        color: #3555e3;
-        font-size: 14px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 30px;
-        border: 1px solid #ffffff;
-        position: absolute;
-        top: 25px;
-        right: 100px;
-        padding: 0 10px;
-        border-radius: 5px;
-    }
-    .head {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 60px;
-        background: linear-gradient(45deg, #9ccc7f, #f7e5f6);
-        color: #ffffff;
-        font-size: 28px;
-        position: relative;
-        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    }
-    .userInfo { 
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        background: linear-gradient(45deg, #e797e2, #eaeee8);
-        position: absolute;
-        right: 10px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer; 
-    }
-    .user_menu {
-        width: 100px; /* 调整宽度 */
-        display: none;
-        background-color: thistle;
-        color: black;
-        position: absolute;
-        top: 54px;
-        right: 0;
-        font-size: 12px;
-        padding: 10px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        border-radius: 5px; /* 圆角 */
-    }
-    .userInfo:hover .user_menu {
-        display: block;
-    }
-    .user_menu p {
-        margin: 0;
-        padding: 5px;
-        text-align: center;
-        cursor: pointer;
-        transition: background 0.3s;
-    }
-    .user_menu p:hover {
-        background-color: #c09de5; 
-    }
-
-    .container {
-        display: flex;
-        height: calc(100vh - 60px); 
-    }
-    .menu {
-        background: linear-gradient(45deg, #f7e5f6, #a7c992);
-        flex: 1; 
-        padding: 20px; 
-        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-        border-right: 2px solid #eaeaea; /* 添加分隔线 */
-    }
-    .menu ul {
-        list-style-type: none; 
-    }
-    .menu li {
-        margin: 10px 0; 
-    }
-    .menu a {
-        display: block;
-        padding: 10px;
-        color: #4a4a4a;
-        text-decoration: none;
-        transition: background-color 0.3s;
-    }
-    .menu a:hover {
-        color: #b181de; 
-        background-color: #e0e0e0; /* 悬停背景色 */
-}
-    .submenu {
-        display: none; 
-        padding-left: 20px; 
-    } 
-    #content {
-        background: linear-gradient(45deg, #ccdbc4, #e8dce8);
-        flex: 7; 
-        padding: 20px; 
-        color: #4a4a4a; /* 内容字体颜色 */
-        box-shadow: inset 0 0 10px rgba(0,0,0,0.1); /* 内阴影效果 */
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-    }
-    th, td {
-        border: 1px solid #ccc;
-        padding: 8px;
-        text-align: left;
-    }
-    th {
-        background-color: #f2f2f2;
-    }
-    form {
-        margin-bottom: 20px;
-    }
-    h2 {
-        margin-bottom: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 40px;
-        background-color: #f2f2f2;
-        color: #4a4a4a;
-        font-size: 20px;
-        border-radius: 5px; 
-        padding: 0 10px;
-    }
-    #addStudent {
-        margin: 10px 0;
-        padding: 5px 10px;
-        border-radius: 5px;
-        border: 1px solid #ffffff;
-        color: black;
-        font-size: 8px;
-        cursor: pointer;
-        margin-left: 40px;
-    }
-    #addStudent:hover {
-        background-color: #a7c992; /* 悬停效果 */
-
-
-    }
-    #studentTable th{  
-        background-color: #f2f2f2;
-        color: #4a4a4a;
-        font-size: 16px;
-        text-align: center; 
-
-    }
-
-</style>
 </html>
