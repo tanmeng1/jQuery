@@ -7,6 +7,7 @@
     <script src="jquery-3.6.0.min.js"></script>
     <script src="mock.js" type="text/javascript" charset="utf-8"></script>
 </head>
+
 <body>
     <div class="head">
         学生信息管理系统 v 1.0
@@ -19,7 +20,7 @@
             TM
             <div class="user_menu">
                 <p id="myInfoBtn">账号信息</p>
-                <p id="openModalBtn">修改密码</p>
+                <p id="openModalBtn">修改密码</p>              
                 <p onclick="toggleUserInfo()">未读消息(0)</p><hr>
                 <p>退出登录</p>
             </div>               
@@ -38,6 +39,21 @@
         </div>
     </div>
 
+    <!-- 账号信息弹窗 -->
+    <div id="userInfoModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>账号信息</h2>
+            <div class="user-details">
+                <p><strong>用户名：</strong> 张三</p>
+                <p><strong>邮箱：</strong> zhangsan@example.com</p>
+                <p><strong>联系方式：</strong> 13812345678</p>
+                <p><strong>班级：</strong> 2019级软件技术4班</p>
+            </div>
+        </div>
+    </div>
+
+
     <!-- 添加学生弹窗 -->
     <div id="addStudentModal" class="modal">
         <div class="modal-content">
@@ -46,52 +62,113 @@
             <label for="studentName">姓名：</label> <input type="text" id="studentName" placeholder="请输入姓名"><br><br>
             <label for="gender">性别：</label><input type="text" id="gender" placeholder="请输入性别"><br><br>
             <label for="age">年龄：</label><input type="text" id="age" placeholder="请输入年龄"><br><br>
-            <label for="class">班级：</label> <input type="text" id="class" placeholder="请输入班级"><br><br>
+            <label for="class">职业：</label> <input type="text" id="class" placeholder="请输入班级"><br><br>
             <button id="addStudentSubmit">提交</button>
         </div>
     </div>
-    
 
+    <!-- 修改用户信息模态框 -->
+        <div id="editUserModal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeEditModal()">&times;</span>
+                <h2>修改用户信息</h2>
+                <label for="editName">姓名：</label>
+                <input type="text" id="editName" placeholder="请输入姓名"><br><br>
+                <label for="editAge">年龄：</label>
+                <input type="number" id="editAge" placeholder="请输入年龄"><br><br>
+                <label for="editSex">性别：</label>
+                <input type="text" id="editSex" placeholder="请输入性别"><br><br>
+                <button id="saveBtn">保存</button>
+            </div>
+        </div>
+
+        <!-- 删除用户确认模态框 -->
+        <div id="deleteUserModal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeDeleteModal()">&times;</span>
+                <h2>确认删除</h2>
+                <p>确认删除吗？</p>
+                <button id="deleteBtn">确认</button>
+            </div>
+        </div>
     <div class="container">
         <div class="menu">
             <ul>
                     <li>
                         <a href="#personalCenter" class="menu-item">＋ 个人中心</a>
                         <ul class="submenu">
-                            <li id="myInfo"><a href="#myInfo">我的信息</a></li>
-                            <li id="classInfo"><a href="#classInfo">班级信息</a></li>
+                            <li id="myInfo"><a href="#myInfo"><img src="img/我.png" alt="个人中心">&nbsp;我的信息</a></li>
+                            <li id="classInfo"><a href="#classInfo"><img src="img/班级信息.png" alt="班级信息">&nbsp;班级信息</a></li>
                         </ul> 
                     </li>
                     <li>
                         <a href="#home" class="menu-item">＋ 教务中心</a>
                         <ul class="submenu">
-                            <li id="myAdmissions"><a href="#myAdmissions">我的报考</a></li>
-                            <li id="myGrades"><a href="#myGrades">我的成绩</a></li>
-                            <li id="myBooks"><a href="#myBooks">我的书籍</a></li>
+                            <li id="myAdmissions"><a href="#myAdmissions"><img src="img/报考.png" alt="报考">&nbsp;我的报考</a></li>
+                            <li id="myGrades"><a href="#myGrades"><img src="img/成绩.png" alt="成绩">&nbsp;我的成绩</a></li>
+                            <li id="myBooks"><a href="#myBooks"><img src="img/书籍.png" alt="书籍">&nbsp;我的书籍</a></li>
                         </ul>
                     </li>
                 <li>
                     <a href="#contact" class="menu-item">＋ 学习中心</a>
                     <ul class="submenu">
-                        <li id = "myCourses"><a href="#myCourses">我的课程</a></li>
-                        <li id="myAssignments"><a href="#">我的作业</a></li>
-                        <li id="myExams"><a href="#">我的考试</a></li>
+                        <li id = "myCourses"><a href="#myCourses"><img src="img/课程表.png" alt="课程">&nbsp;我的课程</a></li>
+                        <li id="myAssignments"><a href="#"><img src="img/作业.png" alt="作业">&nbsp;我的作业</a></li>
+                        <li id="myExams"><a href="#"><img src="img/考试.png" alt="考试">&nbsp;我的考试</a></li>
                     </ul>
                 </li>
                 <li>
                     <a href="#contact" class="menu-item">＋ 财务中心</a>
                     <ul class="submenu">
-                            <li id="myFinance"><a href="#">我的财务</a></li>
+                            <li id="myFinance"><a href="#"><img src="img/财务.png" alt="财务">&nbsp;我的财务</a></li>
                     </ul>
                 </li>
             </ul>
         </div>
-        
-        <div id="content">
-            <h2>欢迎使用学生信息管理系统</h2><p>请选择左侧菜单。</p>
-        </div>  
 
-    <script>
+        <div id="content" class="content-container">
+            <h2>欢迎使用学生信息管理系统</h2>
+            <div class="welcome-box">
+                <h3>系统功能概述</h3>
+                <ul>
+                    <li>个人中心：查看和修改个人信息。</li>
+                    <li>教务中心：查询当前的报考状态和成绩。</li>
+                    <li>学习中心：查看课程、作业和考试信息。</li>
+                    <li>财务中心：管理缴费信息与财务状态。</li>
+                </ul>
+            </div>
+        
+            <div class="news-section">
+                <h3>最新公告</h3>
+                <ul>
+                    <li>2024-01-15：新学期课程安排已发布，请及时查看。</li>
+                    <li>2024-01-10：寒假期间，教务处将于1月20日和1月25日开放。</li>
+                    <li>2024-01-05：新的财务管理系统上线，请更新您的个人信息以保障顺利缴费。</li>
+                </ul>
+            </div>
+        
+            <div class="tips-section">
+                <h3>使用小贴士 </h3>
+                <p>在使用系统时，请确认个人信息的准确性，确保您的联系方式是最新的。任何问题请联系系统管理员。</p>
+                <div>
+                    <button id="btn">提交反馈</button>
+                </div>
+            
+                <!-- 模态弹窗 -->
+                <div id="myModal" class="modal">
+                    <div class="modal-content1">
+                        <p>请输入您的反馈：</p>
+                        <textarea id="feedback" placeholder="在这里输入反馈..."></textarea>
+                        <button id = "close" class="submit-btn">关闭</button>
+                        <button class="submit-btn" id="submitFeedback">提交</button>
+                    </div>
+                </div>
+            
+                   
+            </div>
+        </div>  
+        
+    <script type="text/javascript">
         $(document).ready(function() {
             $('.menu-item').click(function(event) {
                 event.preventDefault(); 
@@ -112,140 +189,132 @@
                                         <div class='box2'>我的异议: <br><br>暂无！</div>`     
                         break;
                     case "classInfo": 
-                         contentHtml = `
-                         
-                    <h2>班级信息<button id='addStudent'>添加学生</button></h2>
-                    <table id='studentTable'>
-                        <thead>
-                            <tr>
-                                <th>姓名</th>
-                                <th>性别</th>
-                                <th>年龄</th>
-                                <th>年级</th>
-                                <th>操作</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>杜勇</td>
-                                <td>男</td>
-                                <td>20</td>
-                                <td>2019级软件技术4班</td>
-                                <td><button onclick='deleteStudent(this)'>删除</button></td>
-                            </tr>
-                            <tr>
-                                <td>康霞</td>
-                                <td>女</td>
-                                <td>21</td>
-                                <td>2019级软件技术4班</td>
-                                <td><button onclick='deleteStudent(this)'>删除</button></td>
-                            </tr>
-                            <tr>
-                                <td>万秀英</td>
-                                <td>女</td>
-                                <td>22</td>
-                                <td>2019级软件技术4班</td>
-                                <td><button onclick='deleteStudent(this)'>删除</button></td>
-                            </tr>
-                            <tr>
-                                <td>程强</td>
-                                <td>男</td>
-                                <td>23</td>
-                                <td>2019级软件技术4班</td>
-                                <td><button onclick='deleteStudent(this)'>删除</button></td>
-                            </tr>
-                            <tr>
-                                <td>崔超</td>
-                                <td>男</td>
-                                <td>24</td>
-                                <td>2019级软件技术4班</td>
-                                <td><button onclick='deleteStudent(this)'>删除</button></td>
-                            </tr>
-                            <tr>
-                                <td>王晓红</td>
-                                <td>女</td>
-                                <td>25</td>
-                                <td>2019级软件技术4班</td>
-                                <td><button onclick='deleteStudent(this)'>删除</button></td>
-                            </tr>
-                            <tr>
-                                <td>宋勇</td>
-                                <td>男</td>
-                                <td>26</td>
-                                <td>2019级软件技术4班</td>
-                                <td><button onclick='deleteStudent(this)'>删除</button></td>
-                            </tr>
-                              <tr>
-                     <td>于静</td>
-                     <td>女</td>
-                     <td>20</td>
-                     <td>2019级软件技术4班</td>
-                     <td><button onclick="deleteStudent(this)">删除</button></td>
-                 </tr>
-                 <tr>
-                    <td>龙明</td>
-                     <td>男</td>
-                     <td>21</td>
-                     <td>2019级软件技术4班</td>
-                     <td><button onclick="deleteStudent(this)">删除</button></td>
-                 </tr>
-                 <tr>
-                     <td>康勇</td>
-                     <td>男</td>
-                     <td>22</td>
-                     <td>2019级软件技术4班</td>
-                     <td><button onclick="deleteStudent(this)">删除</button></td>
-                 </tr>
-                 <tr>
-                     <td>唐桂英</td>
-                     <td>男</td>
-                     <td>23</td>
-                     <td>2019级软件技术4班</td>
-                     <td><button onclick="deleteStudent(this)">删除</button></td>
-                 </tr>
+                         contentHtml = `                         
+                    <h2>班级信息<button id='addStudent'>+ 添加学生</button></h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>姓名</th>
+                                    <th>年龄</th>
+                                    <th>性别</th>
+                                    <th>职业</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                        <tbody class='box'></tbody>
+                    </table>`
 
-                        </tbody>
-                    </table>`;
+                 Mock.mock('/mockTest', {
+                    "userInfo|13": [
+                        {
+                            "id|+1": 1,
+                            "name": "@cname",
+                            "age|18-25":20,
+                            "sex|1": ["男", "女"],
+                            "job|1": ["学生"],     
+                            "img_info|3": Mock.Random.image('100x100'),
+                            "ListInfo|3": [{
+                                "img": Mock.Random.image('100x100')
+                            }]
+                        }
+                    ]
+                });
 
+                // ajax接收数据，通过jq
+                $.get('/mockTest')
+                    .done(function(data) {
+                        try {
+                            var users = JSON.parse(data);
+                            console.log(data);
+                            if (users && users.userInfo) {
+                                console.log(users.userInfo);
+                                var html = users.userInfo.map(item => 
+                                    `<tr>
+                                        <td>${item.id}</td>
+                                        <td>${item.name}</td>
+                                        <td>${item.age}</td>
+                                        <td>${item.sex}</td>
+                                        <td>${item.job}</td>
+                                        <td>
+                                            <button class='editBtn' onclick='openEditModal(${item.id}, "${item.name}", ${item.age}, "${item.sex}")'>修改</button>&nbsp;&nbsp;
+                                            <button class='deleteBtn' onclick='openDeleteModal(${item.id})'>删除</button>
+                                        </td>
+                                   </tr>`
+                                    ).join('');
+                                    console.log($(".box"))
+                                    $(".box").append(html);
+                                } else {
+                                    console.error('用户数据格式错误', users);
+                                }
+                            } catch (error) {
+                                console.error('解析数据错误', error);
+                            }
+                        })
+                        .fail(function(jqXHR, textStatus, errorThrown) {
+                            console.error('请求数据失败', textStatus, errorThrown);
+                        })                      
                         break;
                     case "myAdmissions":
                         contentHtml = `<p class='box3'>我的报考</p>
                         <div class='box6'>注意：请仔细核对报考信息，如有错误请联系管理员。</div>
                         <table>
                             <thead >
-                            <tr>
-                                <th>报考时间</th>
-                                <th>报考编号</th>
-                                <th>报考科目</th>
-                                <th>状态</th>
-                            </tr>
+                                <tr>
+                                    <th>报考时间</th>
+                                    <th>报考编号</th>
+                                    <th>报考科目</th>
+                                    <th>状态</th>
+                                </tr>
                             </thead>
-                            <tr>
-                                <td>2024-01-01</td>
-                                <td>2021001</td>
-                                <td>计算机科学与技术</td>
-                                <td>已通过</td>                                
-                            </tr>
-                            <tr>
-                                <td>2023-1-22</td>
-                                <td>2020002</td>
-                                <td>软件技术</td>
-                                <td>已通过</td>                                
-                            </tr>
-                            <tr>
-                                <td>2022-01-12</td>
-                                <td>2019003</td>
-                                <td>web前端框架</td>
-                                <td>已通过</td>                                
-                            </tr>
-                            <tr>
-                                <td>2021-01-23</td>
-                                <td>2018004</td>
-                                <td>网络配置与管理</td>
-                                <td>已通过</td>     
-                            </tr>                           
-                        </table> `                
+                            <tbody class='box'></tbody>
+                        </table> ` 
+
+                        Mock.mock('/mockTest', {
+                         "userInfo|10": [
+                             {
+                            "date|1":["2021-01-01","2021-01-02","2021-01-03","2021-01-08","2021-01-09","2021-01-10","2021-01-11","2021-01-12","2021-01-13","2021-01-14","2021-01-15"],
+                            "number|1":["2021010101","2021010102","2021010103","2021010108","2021010109","2021010110","2021010111","2021010112","2021010113","2021010114","2021010115"] ,
+                            "subject|1":["计算机网络","软件工程","web前端开发","数据库原理","操作系统原理","马克思主义原理","计算机网络原理"],
+                            "state|1":["通过","不通过"],                        
+                            "img_info|3": Mock.Random.image('100x100'),
+                            "ListInfo|3": [{
+                                "img": Mock.Random.image('100x100')
+                            }]
+                        }
+                    ]
+                });
+
+                // ajax接收数据，通过jq
+                        $.get('/mockTest')
+                            .done(function(data) {
+                                try {
+                                    var users = JSON.parse(data);
+                                    console.log(data);
+                                    if (users && users.userInfo) {
+                                        console.log(users.userInfo);
+                                        var html = users.userInfo.map(item => 
+                                    `<tr>
+                                        <td>${item.date}</td>
+                                        <td>${item.number}</td>
+                                        <td>${item.subject}</td>
+                                        <td>${item.state}</td>
+                                   </tr>`
+                                    ).join('');
+                                    console.log($(".box"))
+                                    $(".box").append(html);
+                                } else {
+                                    console.error('用户数据格式错误', users);
+                                }
+                            } catch (error) {
+                                console.error('解析数据错误', error);
+                            }
+                        })
+                        .fail(function(jqXHR, textStatus, errorThrown) {
+                            console.error('请求数据失败', textStatus, errorThrown);
+                        });                         
                         break;
+
                     case "myGrades":
                         contentHtml = `<p class='box3'>我的成绩</p>
                         <div class="box6">注意：请仔细核对成绩信息，如有错误请联系管理员。</div>
@@ -257,32 +326,55 @@
                                 <th>课程性质</th>
                                 <th>成绩</th>
                             </tr>
-                            </thead>
-                            <tr>
-                                <td>计算机网络</td>
-                                <td>3</td>
-                                <td>必修</td>
-                                <td>95</td>                                
-                            </tr>
-                            <tr>
-                                <td>软件工程</td>
-                                <td>3</td>
-                                <td>必修</td>
-                                <td>90</td>                                
-                            </tr>
-                            <tr>
-                                <td>web前端开发</td>
-                                <td>3</td>
-                                <td>必修</td>
-                                <td>85</td>                                
-                            </tr>
-                            <tr>
-                                <td>数据库原理</td>
-                                <td>3</td>
-                                <td>必修</td>
-                                <td>80</td>     
-                            </tr>                           
+                            </thead>  
+                         <tbody class='box'></tbody>                     
                         </table> `
+                        Mock.mock('/mockTest', {
+                    "userInfo|14": [
+                             {
+                            "course|1":["计算机网络","软件工程","web前端开发","数据库原理","操作系统原理","马克思主义原理","计算机网络原理"],
+                            "credit|1-3":1 ,
+                            "curriculum|1":["必修课","选修课"],
+                            "score|60-100":60,
+                            
+                            "img_info|3": Mock.Random.image('100x100'),
+                            "ListInfo|3": [{
+                                "img": Mock.Random.image('100x100')
+                            }]
+                        }
+                    ]
+                });
+
+        // ajax接收数据，通过jq
+                $.get('/mockTest')
+                    .done(function(data) {
+                        try {
+                            var users = JSON.parse(data);
+                            console.log(data);
+                            if (users && users.userInfo) {
+                                console.log(users.userInfo);
+                                var html = users.userInfo.map(item => 
+                                    `<tr>
+                                        <td>${item.course}</td>
+                                        <td>${item.credit}</td>
+                                        <td>${item.curriculum}</td>
+                                        <td>${item.score}</td>
+                                   </tr>`
+                                    ).join('');
+                                    console.log($(".box"))
+                                    $(".box").append(html);
+                                } else {
+                                    console.error('用户数据格式错误', users);
+                                }
+                            } catch (error) {
+                                console.error('解析数据错误', error);
+                            }
+                        })
+                        .fail(function(jqXHR, textStatus, errorThrown) {
+                            console.error('请求数据失败', textStatus, errorThrown);
+                        });
+
+                        
                         break;
                     case "myBooks":
                         contentHtml = `
@@ -298,65 +390,55 @@
                                 <th>发售日期</th>
                                 <th>操作</th>
                             </tr>
-                            </thead>
-                            <tr>
-                                <td>1</td>
-                                <td>计算机科学与技术</td>
-                                <td>10</td>
-                                <td>2021-01-01</td>
-                                <td><button onclick='deleteBook(this)'>删除</button></td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>软件技术</td>
-                                <td>10</td>
-                                <td>2020-1-22</td>
-                                <td><button onclick='deleteBook(this)'>删除</button></td>                               
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>web前端框架</td>
-                                <td>10</td>
-                                <td>2019-1-12</td>
-                                <td><button onclick='deleteBook(this)'>删除</button></td>                               
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>网络配置与管理</td>
-                                <td>20</td>
-                                <td>2018-1-23</td>
-                                <td><button onclick='deleteBook(this)'>删除</button></td>                               
-                            </tr>   
-                            <tr>
-                                <td>5</td>
-                                <td>数据库原理</td>
-                                <td>10</td>
-                                <td>2021-01-01</td>
-                                <td><button onclick='deleteBook(this)'>删除</button></td>                               
-                            </tr>
-                            <tr>
-                                <td>6</td>
-                                <td>操作系统原理</td>
-                                <td>10</td>
-                                <td>2020-1-22</td>
-                                <td><button onclick='deleteBook(this)'>删除</button></td>                               
-                            </tr>
-                            <tr>
-                                <td>7</td>
-                                <td>马克思主义原理</td>
-                                <td>10</td>
-                                <td>2019-1-12</td>
-                                <td><button onclick='deleteBook(this)'>删除</button></td>                               
-                            </tr>
-                            <tr>
-                                <td>8</td>
-                                <td>计算机网络原理</td>
-                                <td>20</td>
-                                <td>2018-1-23</td>
-                                <td><button onclick='deleteBook(this)'>删除</button></td>                               
-                            </tr>   
-                        </table>
-                        `;
+                            </thead>  
+                            <tbody class='box'></tbody>                     
+                        </table> `
+
+                        Mock.mock('/mockTest', {
+                    "userInfo|14": [
+                        {
+                            "id|1-10":4,
+                            "book|1":["计算机网络原理","软件工程原理","web前端开发","数据库原理","操作系统原理","马克思主义原理","计算机网络原理"] ,
+                            "number|2-30":10,
+                            "date|1":["2021-01-01","2021-01-02","2021-01-03","2021-01-08","2021-01-09","2021-01-10","2021-01-11","2021-01-12","2021-01-13","2021-01-14","2021-01-15"],
+                            
+                            "img_info|3": Mock.Random.image('100x100'),
+                            "ListInfo|3": [{
+                                "img": Mock.Random.image('100x100')
+                            }]
+                        }
+                    ]
+                });
+
+                // ajax接收数据，通过jq
+                        $.get('/mockTest')
+                            .done(function(data) {
+                            try {
+                            var users = JSON.parse(data);
+                            console.log(data);
+                            if (users && users.userInfo) {
+                                console.log(users.userInfo);
+                                var html = users.userInfo.map(item => 
+                                    `<tr>
+                                        <td>${item.id}</td>
+                                        <td>${item.book}</td>
+                                        <td>${item.number}</td>
+                                        <td>${item.date}</td>
+                                        <td><button class='deleteBtn' onclick='openDeleteModal(${item.id})'>删除</button></td>
+                                   </tr>`
+                                    ).join('');
+                                    console.log($(".box"))
+                                    $(".box").append(html);
+                                } else {
+                                    console.error('用户数据格式错误', users);
+                                }
+                            } catch (error) {
+                                console.error('解析数据错误', error);
+                            }
+                        })
+                        .fail(function(jqXHR, textStatus, errorThrown) {
+                            console.error('请求数据失败', textStatus, errorThrown);
+                        });
                         break;
                             case "myCourses":
                                 contentHtml = `
@@ -365,65 +447,129 @@
                                 <table>
                                     <thead >
                                     <tr>
+                                        <th>编号</th>
                                         <th>课程名称</th>
                                         <th>开课时间</th>
                                         <th>结束时间</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>
-                                    <tr>
-                                        <td>计算机网络</td>
-                                        <td>2021-01-01</td>
-                                        <td>2021-05-31</td>
-                                        <td><button onclick='deleteCourse(this)'>删除</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>软件工程</td>
-                                        <td>2020-1-22</td>
-                                        <td>2020-5-31</td>
-                                        <td><button onclick='deleteCourse(this)'>删除</button></td>                               
-                                    </tr>
-                                    <tr>
-                                        <td>web前端开发</td>
-                                        <td>2019-1-12</td>
-                                        <td>2019-5-31</td>
-                                        <td><button onclick='deleteCourse(this)'>删除</button></td>                               
-                                    </tr>
-                                    <tr>
-                                        <td>数据库原理</td>
-                                        <td>2018-1-23</td>
-                                        <td>2018-5-31</td>
-                                        <td><button onclick='deleteCourse(this)'>删除</button></td>                               
-                                    </tr>   
-                                </table>
-                                `;
-                                break;
+                                    <tbody class='box'></tbody>    
+                                </table>`
+
+                                Mock.mock('/mockTest', {
+                              "userInfo|8": [
+                                   {
+                                    "id|+1":1,
+                                    "schoolassignment|1":["计算机网络","软件工程","web前端开发","数据库原理","操作系统原理","马克思主义原理","计算机网络原理"],                             
+                                    "date|1":["2021-01-01","2021-01-02","2021-01-03","2021-01-08","2021-01-09","2021-01-10","2021-01-11","2021-01-12","2021-01-13","2021-01-14","2021-01-15"],
+                                    "date|1":["2021-02-01","2021-02-02","2021-02-03","2021-02-08","2021-02-09","2021-02-10","2021-02-11","2021-02-12","2021-02-13","2021-02-14","2021-02-15"],
+                                    "img_info|3": Mock.Random.image('100x100'),
+                                    "ListInfo|3": [{
+                                    "img": Mock.Random.image('100x100')
+                            }]
+                        }
+                    ]
+                });
+
+                // ajax接收数据，通过jq
+                        $.get('/mockTest')
+                            .done(function(data) {
+                            try {
+                            var users = JSON.parse(data);
+                            console.log(data);
+                            if (users && users.userInfo) {
+                                console.log(users.userInfo);
+                                var html = users.userInfo.map(item => 
+                                    `<tr>
+                                        <td>${item.id}</td>
+                                        <td>${item.schoolassignment}</td>
+                                        <td>${item.date}</td>              
+                                        <td>${item.date}</td>
+                                        <td><button class='deleteBtn' onclick='openDeleteModal(${item.id})'>删除</button></td>
+                                   </tr>`
+                                    ).join('');
+                                    console.log($(".box"))
+                                    $(".box").append(html);
+                                } else {
+                                    console.error('用户数据格式错误', users);
+                                }
+                            } catch (error) {
+                                console.error('解析数据错误', error);
+                            }
+                        })
+                        .fail(function(jqXHR, textStatus, errorThrown) {
+                            console.error('请求数据失败', textStatus, errorThrown);
+                        });
+                        break;
+
+
+                                
                             case "myAssignments":
                                 contentHtml = `
                                 <p class='box3'>我的作业</p>
                                 <div class="box6">注意：请仔细核对作业信息，如有错误请联系管理员。</div>
                                 <table>
-                                    <thead >
+                                            <thead >
                                     <tr>
+                                        <th>编号</th>
                                         <th>作业名称</th>
-                                        <th>发布时间</th>
-                                        <th>截止时间</th>
-                                        <th>操作</th>
+                                        <th>发布日期</th>
+                                        <th>截止日期</th>
+                                        <th>操作</th>  
                                     </tr>
-                                    </thead>
-                                    <tr>
-                                        <td>作业1</td>
-                                        <td>2021-01-01</td>
-                                        <td>2021-05-31</td>
-                                        <td><button onclick='deleteAssignment(this)'>删除</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>作业2</td>
-                                        <td>2020-1-22</td>
-                                        <td>2020-5-31</td>
-                                        <td><button onclick='deleteAssignment(this)'>删除</button></td>                                       
-                                    </tr>`
-                                break;
+                                    </thead>  
+                                    <tbody class='box'></tbody>                     
+                                   <table>`
+
+
+                                    Mock.mock('/mockTest', {
+                              "userInfo|8": [
+                                   {
+                                    "id|+1":1,
+                                    "schoolassignment|1":["作业1","作业2","作业3"],                             
+                                    "date|1":["2021-01-01","2021-01-02","2021-01-03","2021-01-08","2021-01-09","2021-01-10","2021-01-11","2021-01-12","2021-01-13","2021-01-14","2021-01-15"],
+                                    "date|1":["2021-02-01","2021-02-02","2021-02-03","2021-02-08","2021-02-09","2021-02-10","2021-02-11","2021-02-12","2021-02-13","2021-02-14","2021-02-15"],
+                                    "img_info|3": Mock.Random.image('100x100'),
+                                    "ListInfo|3": [{
+                                    "img": Mock.Random.image('100x100')
+                            }]
+                        }
+                    ]
+                });
+
+                // ajax接收数据，通过jq
+                        $.get('/mockTest')
+                            .done(function(data) {
+                            try {
+                            var users = JSON.parse(data);
+                            console.log(data);
+                            if (users && users.userInfo) {
+                                console.log(users.userInfo);
+                                var html = users.userInfo.map(item => 
+                                    `<tr>
+                                        <td>${item.id}</td>
+                                        <td>${item.schoolassignment}</td>
+                                        <td>${item.date}</td>              
+                                        <td>${item.date}</td>
+                                        <td><button class='deleteBtn' onclick='openDeleteModal(${item.id})'>删除</button></td>
+                                   </tr>`
+                                    ).join('');
+                                    console.log($(".box"))
+                                    $(".box").append(html);
+                                } else {
+                                    console.error('用户数据格式错误', users);
+                                }
+                            } catch (error) {
+                                console.error('解析数据错误', error);
+                            }
+                        })
+                        .fail(function(jqXHR, textStatus, errorThrown) {
+                            console.error('请求数据失败', textStatus, errorThrown);
+                        });
+                        break;
+
+                                
                             case "myExams":
                                         contentHtml = `
                                         <p class='box3'>我的考试</p>
@@ -435,18 +581,18 @@
                                         <div class="box6">注意：请仔细核对财务信息，如有错误请联系管理员。</div>
                                         <table>
                                             <thead >
+                                            <tr>
+                                                <th>总缴费统计</th>
+                                                <th>应缴费</th>
+                                                <th>实缴费</th>
+                                                <th>欠款</th>
+                                            </tr>
                                                 <tr>
-                                                    <th>总缴费统计</th>
-                                                    <th>应缴费</th>
-                                                    <th>实缴费</th>
-                                                    <th>欠款</th>
-                                                </tr>
-                                                <tr>
-                                                    <td>2021-01-01至2021-12-31</td>
-                                                    <td>10000</td>
-                                                    <td>9000</td>
-                                                    <td>1000</td>
-                                                </tr>
+                                                <td>2021-01-01至2021-12-31</td>
+                                                <td>10000</td>
+                                                <td>9000</td>
+                                                <td>1000</td>
+                                            </tr>
                                             </thead>`
                                         break;
 
@@ -455,6 +601,7 @@
                 }
 
                 $('#content').html(contentHtml);
+
 
                 // 添加学生事件
                 $('#addStudent').off('click').on('click', function() {
@@ -494,45 +641,138 @@
                     alert('请检查输入，确保新密码与确认密码一致！');
                     return;
                 }
-
                 console.log('新名字:', newName, '新密码:', newPassword);
                 modal.hide();
             }); 
+        });
 
-            $('#addStudentSubmit').on('click', function() {
-                const studentName = $('#studentName').val();
-                if (!studentName) {
-                    alert('姓名不能为空！');
-                    return;
+        $(document).ready(function() {
+                $('#myInfoBtn').on('click', function() {
+                    $('#userInfoModal').show();
+                });
+
+                // 关闭用户信息弹窗
+                $('.close').on('click', function() {
+                    $('#userInfoModal').hide();
+                });   
+                $(window).on('click', function(event) {
+                    if (event.target === $('#userInfoModal')[0]) {
+                        $('#userInfoModal').hide();             
                 }
-                const gender = $('#gender').val();
-                if (!gender) {
-                    alert('性别不能为空！');
-                    return;
-                }
-                const age = $('#age').val();
-                if (!age) {
-                    alert('年龄不能为空！');
-                    return;
-                }
-                const class_ = $('#class').val();
-                if (!class_) {
-                    alert('班级不能为空！');
-                    return;
-                }
-                // 在这里可以添加逻辑将新学生添加到数据中
-                console.log('添加学生姓名:', studentName);
-                $('#addStudentModal').hide();
             });
         });
 
         function deleteStudent(button) {
             const row = button.parentElement.parentElement;
             row.parentNode.removeChild(row);
-        }
-    </script>
-      
 
+        }       
+    </script> 
+
+            <script>
+                let currentUserIdToEdit = null; // 当前正在编辑的用户ID
+                function openEditModal(userId, name, age, sex) {
+                    currentUserIdToEdit = userId; // 保存用户ID
+                    $('#editName').val(name); // 填充用户信息
+                    $('#editAge').val(age);
+                    $('#editSex').val(sex);
+                    $('#editUserModal').show(); // 显示修改模态框
+                }
+                function closeEditModal() {
+                    $('#editUserModal').hide(); // 隐藏修改模态框
+                }
+                function saveUser() {
+                    const name = $('#editName').val(); // 获取输入的值
+                    const age = $('#editAge').val();
+                    const sex = $('#editSex').val();
+
+                    const row = $(`tr:has(td:contains(${currentUserIdToEdit}))`);
+                    
+                    if (name && age && sex) {
+                        row.children().eq(1).text(name);
+                        row.children().eq(2).text(age);
+                        row.children().eq(3).text(sex);
+                        alert("用户信息已保存。");
+                        closeEditModal(); // 关闭模态框
+                    } else {
+                        alert("请确保所有字段都有填写。");
+                    }
+                }
+
+                // 为保存按钮绑定事件
+                $('#saveBtn').click(saveUser);         
+              </script>
+
+              <script>
+                let currentUserIdToDelete = null; // 当前要删除的用户ID
+
+                function openDeleteModal(userId) {
+                    currentUserIdToDelete = userId; // 保存要删除的用户ID
+                    $('#deleteUserModal').show(); // 显示删除确认模态框
+                }
+
+                function closeDeleteModal() {
+                    $('#deleteUserModal').hide(); // 隐藏删除确认模态框
+                }
+
+                function confirmDeleteUser() {
+                // 直接从删除按钮的上下文寻找要删除的行
+                const row = $(`tr`).filter(function() {
+                    return $(this).find('td').first().text() == currentUserIdToDelete; // 根据 ID 匹配行
+                });
+
+                if (row.length) {
+                    row.remove(); // 删除对应行
+                    alert("已删除。"); // 提示用户
+                } else {
+                    alert("未找到。"); 
+                }
+
+                closeDeleteModal(); // 关闭模态框
+            }
+                // 为确认删除按钮绑定事件
+                $('#deleteBtn').click(confirmDeleteUser);
+              </script>
+
+                    <script>
+                            // 获取模态弹窗和按钮
+                        const modal = document.getElementById("myModal");
+                        const btn = document.getElementById("btn");
+                        const closeBtn = document.getElementById("close");
+                        const submitFeedback = document.getElementById("submitFeedback");
+                        const feedbackInput = document.getElementById("feedback");
+
+                        // 点击按钮时打开模态弹窗
+                        btn.onclick = function() {
+                            modal.style.display = "block";
+                        }
+
+                        // 点击关闭按钮时关闭模态弹窗
+                        closeBtn.onclick = function() {
+                            modal.style.display = "none";
+                        }
+
+                        // 点击模态弹窗外部也关闭模态弹窗
+                        window.onclick = function(event) {
+                            if (event.target === modal) {
+                                modal.style.display = "none";
+                            }
+                        }
+
+                        // 点击提交按钮时处理反馈
+                        submitFeedback.onclick = function() {
+                            const feedback = feedbackInput.value;
+                            if (feedback) {
+                                alert("您的反馈已提交:\n" + feedback);
+                                feedbackInput.value = ""; // 清空输入框
+                                modal.style.display = "none"; // 关闭弹窗
+                            } else {
+                                alert("请输入反馈内容！"); // 提示用户输入内容
+                            }
+                        }
+
+                  </script>
+              
 
     <style>
         * {
@@ -544,6 +784,11 @@
             background-color: #f7e5f6; 
             font-family: Arial, sans-serif;
         }
+        menu,img {
+            height: 18px;
+            width: 18px;
+        }
+
         .box-title {
             margin-bottom: 20px;
             text-align: center;
@@ -595,6 +840,22 @@
             background-color: #a7c992;
             color: #4a4a4a;
         }
+        .deleteBtn {
+            background-color: red;
+            color: #ffffff;
+            border: none;
+            padding: 4px 6px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .editBtn{
+            background-color: red;
+            color: #ffffff;
+            border: none;
+            padding: 4px 6px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
         .form-group {
              background-color: #fefefe;
              margin: 15% auto;
@@ -616,25 +877,6 @@
              text-decoration: none;
              cursor: pointer;
          }
-
-
-        
-
-        .box{
-            width: 400px;
-            height: 600px;
-            background-color: aqua;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            text-align: center;
-            transform: translate(-50%, -50%);
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }   
-        .box span{
-            padding: 10px;
-        }
         .box1 {
             color: #3555e3;
             font-size: 14px;
@@ -747,6 +989,46 @@
             box-shadow: inset 0 0 10px rgba(0,0,0,0.1); 
 
         }
+        .content-container {
+        padding: 20px;
+        background-color: #f8f8f8;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        color: #3555e3;
+        text-align: center;
+    }
+
+    .welcome-box, .news-section, .tips-section {
+        background-color: #ffffff;
+        border-radius: 5px;
+        padding: 15px;
+        margin: 15px 0;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+        color: #4a4a4a;
+        margin-bottom: 10px;
+    }
+
+    ul {
+        list-style-type: disc;
+        padding-left: 20px;
+    }
+
+    li {
+        margin: 5px 0;
+    }
+
+    p {
+        color: #333;
+        line-height: 1.6;
+    }
+
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -807,7 +1089,7 @@
             height: 100%;
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.4);
-        }
+        }  
 
         .modal-content {
             background-color: #fefefe;
@@ -816,19 +1098,57 @@
             border: 1px solid #888;
             width: 30%;
         }
-
         .close {
             color: #aaa;
             float: right;
             font-size: 28px;
             font-weight: bold;
         }
-
         .close:hover,
         .close:focus {
             color: black;
             text-decoration: none;
             cursor: pointer;
+        }
+
+        #btn {
+            background-color: #2e7cb3;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        /* 弹窗内容 */
+        .modal-content1 {
+            background-color: #fefefe;
+            margin: 15% auto; /* 中心位置 */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%; /* 宽度 */
+            height: 50%; /* 高度 */
+            text-align: center;
+        }
+
+              /* 输入区域样式 */
+        textarea {
+            width: 60%;
+            height: 60%;
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none; /* 禁止调整大小 */
+        }
+
+        /* 提交按钮 */
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 5px 10px;      
         }
 
         .studentForm {
