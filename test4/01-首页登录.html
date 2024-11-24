@@ -59,10 +59,14 @@
         <div class="modal-content">
             <span class="close1">&times;</span>
             <h2>添加学生</h2>
-            <label for="studentName">姓名：</label> <input type="text" id="studentName" placeholder="请输入姓名"><br><br>
-            <label for="gender">性别：</label><input type="text" id="gender" placeholder="请输入性别"><br><br>
-            <label for="age">年龄：</label><input type="text" id="age" placeholder="请输入年龄"><br><br>
-            <label for="class">职业：</label> <input type="text" id="class" placeholder="请输入班级"><br><br>
+            <label for="studentName">姓名：</label> 
+            <input type="text" id="studentName" placeholder="请输入姓名"><br><br>
+            <label for="gender">性别：</label>
+            <input type="text" id="gender" placeholder="请输入性别"><br><br>
+            <label for="age">年龄：</label>
+            <input type="text" id="age" placeholder="请输入年龄"><br><br>
+            <label for="class">班级：</label> 
+            <input type="text" id="class" placeholder="请输入班级"><br><br>
             <button id="addStudentSubmit">提交</button>
         </div>
     </div>
@@ -78,6 +82,8 @@
                 <input type="number" id="editAge" placeholder="请输入年龄"><br><br>
                 <label for="editSex">性别：</label>
                 <input type="text" id="editSex" placeholder="请输入性别"><br><br>
+                <label for="editClass">班级：</label>
+                <input type="text" id="editClass" placeholder="请输入班级"><br><br>
                 <button id="saveBtn">保存</button>
             </div>
         </div>
@@ -198,7 +204,7 @@
                                     <th>姓名</th>
                                     <th>年龄</th>
                                     <th>性别</th>
-                                    <th>职业</th>
+                                    <th>班级</th>
                                     <th>操作</th>
                                 </tr>
                             </thead>
@@ -206,13 +212,13 @@
                     </table>`
 
                  Mock.mock('/mockTest', {
-                    "userInfo|13": [
+                    "userInfo|12": [
                         {
                             "id|+1": 1,
                             "name": "@cname",
                             "age|18-25":20,
                             "sex|1": ["男", "女"],
-                            "job|1": ["学生"],     
+                            "class1|1": ["软件工程"],     
                             "img_info|3": Mock.Random.image('100x100'),
                             "ListInfo|3": [{
                                 "img": Mock.Random.image('100x100')
@@ -235,9 +241,9 @@
                                         <td>${item.name}</td>
                                         <td>${item.age}</td>
                                         <td>${item.sex}</td>
-                                        <td>${item.job}</td>
+                                        <td>${item.class1}</td>
                                         <td>
-                                            <button class='editBtn' onclick='openEditModal(${item.id}, "${item.name}", ${item.age}, "${item.sex}")'>修改</button>&nbsp;&nbsp;
+                                            <button class='editBtn' onclick='openEditModal(${item.id}, "${item.name}", ${item.age}, "${item.sex}", "${item.class1}")'>编辑</button>&nbsp;&nbsp;
                                             <button class='deleteBtn' onclick='openDeleteModal(${item.id})'>删除</button>
                                         </td>
                                    </tr>`
@@ -253,7 +259,8 @@
                         })
                         .fail(function(jqXHR, textStatus, errorThrown) {
                             console.error('请求数据失败', textStatus, errorThrown);
-                        })                      
+                        }) 
+                        
                         break;
                     case "myAdmissions":
                         contentHtml = `<p class='box3'>我的报考</p>
@@ -604,10 +611,71 @@
 
 
                 // 添加学生事件
-                $('#addStudent').off('click').on('click', function() {
-                    $('#addStudentModal').show();
-                });
-            });
+                // $('#addStudent').off('click').on('click', function() {
+                //     $('#addStudentModal').show();
+                // });
+                $(document).ready(function() {
+    // 添加学生事件
+    $('#addStudent').off('click').on('click', function() {
+        $('#addStudentModal').show(); // 显示弹窗
+    });
+
+    // 关闭弹窗事件
+    $('.close1').off('click').on('click', function() {
+        $('#addStudentModal').hide(); // 隐藏弹窗
+    });
+
+    // 点击弹窗外部区域时关闭弹窗
+    $(window).on('click', function(event) {
+        if ($(event.target).is('#addStudentModal')) {
+            $('#addStudentModal').hide(); // 隐藏弹窗
+        }
+    });
+
+    // 提交学生信息
+    $('#addStudentSubmit').off('click').on('click', function() {
+        var studentName = $('#studentName').val();
+        var gender = $('#gender').val();
+        var age = $('#age').val();
+        var className = $('#class').val();
+        
+        // 获取当前学生数量以生成ID
+        var newId = $('.box tr').length + 1;
+
+        if (studentName === "" || gender === "" || age === "" || className === "") {
+            alert("请填写所有字段。"); // 验证输入
+        } else {
+            // 添加信息到表格
+            $('.box').append(
+                '<tr>' +
+                    '<td>' + newId + '</td>' +
+                    '<td>' + studentName + '</td>' +
+                    '<td>' + age + '</td>' +
+                    '<td>' + gender + '</td>' +
+                    '<td>' + className + '</td>' +
+                    '<td><button class="editBtn" onclick="openEditModal(${item.id}, "${item.name}", ${item.age}, "${item.sex}", "${item.class1}")">编辑</button>&nbsp;&nbsp;&nbsp;<button class="deleteBtn" onclick="openDeleteModal(${item.id})">删除</button></td>' +
+                    '' +
+                '</tr>'
+            );
+
+            $('#addStudentModal').hide(); // 关闭弹窗
+            // 清空输入框
+            $('#studentName').val('');
+            $('#gender').val('');
+            $('#age').val('');
+            $('#class').val('');
+        }
+    });
+
+    // 删除学生事件
+    $('.box').on('click', '.deleteStudent', function() {
+        $(this).closest('tr').remove(); // 删除对应学生行
+    });
+});
+
+
+              
+ });    
 
             // 弹窗功能
             const modal = $('#modal');
@@ -671,11 +739,12 @@
 
             <script>
                 let currentUserIdToEdit = null; // 当前正在编辑的用户ID
-                function openEditModal(userId, name, age, sex) {
+                function openEditModal(userId, name, age, sex, class1) {
                     currentUserIdToEdit = userId; // 保存用户ID
                     $('#editName').val(name); // 填充用户信息
                     $('#editAge').val(age);
                     $('#editSex').val(sex);
+                    $('#editClass').val(class1);             
                     $('#editUserModal').show(); // 显示修改模态框
                 }
                 function closeEditModal() {
@@ -685,6 +754,7 @@
                     const name = $('#editName').val(); // 获取输入的值
                     const age = $('#editAge').val();
                     const sex = $('#editSex').val();
+                    const class1 = $('#editClass').val();
 
                     const row = $(`tr:has(td:contains(${currentUserIdToEdit}))`);
                     
@@ -692,6 +762,7 @@
                         row.children().eq(1).text(name);
                         row.children().eq(2).text(age);
                         row.children().eq(3).text(sex);
+                        row.children().eq(4).text(class1);
                         alert("用户信息已保存。");
                         closeEditModal(); // 关闭模态框
                     } else {
