@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>用户信息展示</title>
+    <script src="jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css" />
+    <script src="bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
+    <script src="mock.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body>
+    <h1>用户<img src="bootstrap-icons-1.11.3/person-fill.svg" width="50" height="50">&nbsp;信息展示
+        <button id="openModalBtn" class="btn btn-success btn-sm">
+        <img src="bootstrap-icons-1.11.3/plus.svg" width="20" height="20" >&nbsp;添加</button>&nbsp;&nbsp;</button></h1>   
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>姓名</th>
+                <th>年龄</th>
+                <th>性别</th>
+                <th>职业</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody class="box"></tbody>
+    </table>
+
+    <!-- 模态窗 -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalTitle">添加用户</h2>
+            <input type="hidden" id="userId">
+            <p>姓名: <input type="text" id="userName" required></p>
+            <p>年龄: <input type="number" id="userAge" required></p>
+            <p>性别:<input type="text" id="userSex" required></p>    
+            <p>职业: <input type="text" id="userJob" required></p>            
+            <button id="confirmBtn" class="btn btn-primary">
+                <img src="bootstrap-icons-1.11.3/check.svg" width="20" height="20">&nbsp;确认</button>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        // 初始化用户数据
+        let users = [];
+
+        // 使用 Mock.js 生成用户数据
+        Mock.mock('/mockTest', {
+            "userInfo|15": [
+                {
+                    "id|+1": 1,
+                    "name": "@cname",
+                    "age|18-58": 25,
+                    "sex|1": ["男", "女"],
+                    "job|1": ["web", "UI", "python", "php", "java", "go", "ios", "andios", "bootstrap", "jquery", "javascript", "html5", "CSS3"]
+                }
+            ]
+        });
+
+        // 获取用户数据并更新表格
+        $.get('/mockTest')
+            .done(function(data) {
+                var usersData = JSON.parse(data).userInfo;
+                users = usersData;
+                updateTable();
+            })
+            .fail(function() {
+                console.error('请求数据失败');
+            });
+
+        // 更新表格方法
+        function updateTable() {
+            let html = users.map(user =>
+                `<tr data-id="${user.id}">
+                    <td>${user.id}</td>
+                    <td>${user.name}</td>
+                    <td>${user.age}</td>
+                    <td>${user.sex}</td>
+                    <td>${user.job}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary btn-sm edit-btn">
+                            <img src="bootstrap-icons-1.11.3/brush.svg" width="20" height="20">&nbsp;编辑</button>
+                        <button type="button" class="btn btn-danger btn-sm delete-btn">
+                            <img src="bootstrap-icons-1.11.3/archive.svg" width="20" height="20">&nbsp;删除</button>
+                    </td>
+                </tr>`
+            ).join('');
+            $(".box").html(html);
+        }
+
+        // 添加用户按钮
+        $("#openModalBtn").click(function() {
+            $("#modalTitle").text("添加用户");
+            $("#userId").val('');
+            $("#userName").val('');
+            $("#userAge").val('');
+            $("#userSex").val('');
+            $("#userJob").val('');
+            $("#myModal").css('display', 'block');
+        });
+
+        // 关闭模态窗
+        $(".close").click(function() {
+            $("#myModal").css('display', 'none');
+        });
+
+        // 确认按钮 - 添加或修改用户
+        $("#confirmBtn").click(function() {
+            const id = $("#userId").val();
+            const name = $("#userName").val();
+            const age = $("#userAge").val();
+            const sex = $("#userSex").val();
+            const job = $("#userJob").val();
+
+            if (!name || !age || !sex || !job) return;
+
+            if (id) {
+                // 修改用户
+                users = users.map(user => user.id == id ? { id: user.id, name, age, sex, job } : user);
+            } else {
+                // 添加新用户
+                const newUser = { id: users.length + 1, name, age, sex, job };
+                users.push(newUser);
+            }
+            updateTable();
+            $("#myModal").css('display', 'none');
+        });
+
+        // 编辑用户按钮
+        $(document).on('click', '.edit-btn', function() {
+            const row = $(this).closest('tr');
+            const id = row.data('id');
+            const user = users.find(u => u.id === id);
+
+            $("#modalTitle").text("编辑用户");
+            $("#userId").val(user.id);
+            $("#userName").val(user.name);
+            $("#userAge").val(user.age);
+            $("#userSex").val(user.sex);
+            $("#userJob").val(user.job);
+
+            $("#myModal").css('display', 'block');
+        });
+
+        // 删除用户按钮
+        $(document).on('click', '.delete-btn', function() {
+            const row = $(this).closest('tr');
+            const id = row.data('id');
+            users = users.filter(user => user.id !== id);
+            updateTable();
+        });
+
+        // 点击模态窗以外区域，关闭模态窗
+        $(window).click(function(event) {
+            if (event.target === document.getElementById('myModal')) {
+                $("#myModal").css('display', 'none');
+            }
+        });
+
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        /* 模态窗的基本样式 */
+        .modal {
+            display: none; /* 默认隐藏 */
+            position: fixed;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4); /* 背景颜色带透明 */
+        }
+
+        /* 模态窗内容的样式 */
+        .modal-content {
+            background-color: #fefefe;
+
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 25%;
+            height: 50%;
+        }
+
+        /* 关闭按钮的样式 */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        #openModalBtn {
+            margin-left: 10px;
+        }
+        #confirmBtn {
+            margin-left: 180px;
+            font-size: 15px;
+            width: 80px;
+            height: 40px;
+        }
+        #modalTitle{
+            background-color: #f2f2f2;
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            font-size: 20px;
+            border-radius: 2%;
+
+        }
+        
+    </style>
+</body>
+
+</html>
