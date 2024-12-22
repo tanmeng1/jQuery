@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的信息</title>
+    <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(45deg, #9ccc7f, #f7e5f6);
+            font-family: 'Arial', sans-serif;
+        }
+
+        .container {
+            margin-top: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h3 {
+            font-weight: bold;
+            color: #3c763d;
+        }
+
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 40vh;
+            width: 80vw;
+        }
+
+        .table-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h3 class="text-center my-4">我的信息</h3>
+        <a href="02-登陆成功的页面.html" class="btn btn-primary mb-4 btn-sm">返回主页</a>
+
+        <div class="row">
+            <div class="col-md-8">
+                <!-- 成绩变化曲线图 -->
+                <div class="chart-container">
+                    <canvas id="scoreTrendChart"></canvas>
+                </div>
+
+                <!-- 选课饼状图 -->
+                <div class="chart-container">
+                    <canvas id="coursePieChart"></canvas>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="table-container">
+                    <h4>我的课程成绩</h4>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>课程名称</th>
+                                <th>成绩</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>线性代数</td>
+                                <td>85</td>
+                            </tr>
+                            <tr>
+                                <td>计算机网络</td>
+                                <td>86</td>
+                            </tr>
+                            <tr>
+                                <td>英语1</td>
+                                <td>92</td>
+                            </tr>
+                            <tr>
+                                <td>数据库原理</td>
+                                <td>83</td>
+                            </tr>
+                            <tr>
+                                <td>软件工程</td>
+                                <td>88</td>
+                            </tr>
+                            <tr>
+                                <td>操作系统</td>
+                                <td>95</td>
+                            </tr>
+                            <tr>
+                              <td>总成绩</td>
+                              <td>555</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="jquery-3.6.0.min.js"></script>
+    <script src="bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // 成绩变化趋势数据
+            const ctxScore = document.getElementById('scoreTrendChart').getContext('2d');
+            const scoreTrendChart = new Chart(ctxScore, {
+                type: 'line',
+                data: {
+                    labels: ['第一学期', '第二学期', '第三学期', '第四学期', '第五学期'],
+                    datasets: [{
+                        label: '成绩',
+                        data: [85, 88, 92, 79, 95],  // 示例成绩数据
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: '成绩变化趋势'
+                        }
+                    }
+                }
+            });
+
+            // 选课饼状图数据
+            const ctxCourse = document.getElementById('coursePieChart').getContext('2d');
+            const coursePieChart = new Chart(ctxCourse, {
+                type: 'pie',
+                data: {
+                    labels: ['计算机网络', '软件工程', '数据库原理', '操作系统'],  // 示例课程数据
+                    datasets: [{
+                        label: '选课情况',
+                        data: [30, 25, 20, 25],  // 示例选课人数
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: '选课分布'
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
