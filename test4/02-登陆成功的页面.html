@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>学生信息管理系统</title>   
-    <link href="bootstrap-5.3.3-dist/css/bootstrap.min.css">
     <script src="jquery-3.6.0.min.js"></script>
     <script src="mock.js" type="text/javascript" charset="utf-8"></script>
 </head>
@@ -98,7 +97,7 @@
                 <button id="deleteBtn">确认</button>
             </div>
         </div>
-    <div class="container">
+    <div class="container1">
         <div class="menu">
             <ul>
                     <li>
@@ -121,7 +120,7 @@
                     <ul class="submenu">
                         <li id = "myCourses"><a href="#myCourses"><img src="img/课程表.png" alt="课程">&nbsp;我的课程</a></li>
                         <li id="myAssignments"><a href="#"><img src="img/作业.png" alt="作业">&nbsp;我的作业</a></li>
-                        <li id="myExams"><a href="#"><img src="img/考试.png" alt="考试">&nbsp;我的考试</a></li>
+                        <li id="myExams"><a href="kaoshi.html"><img src="img/考试.png" alt="考试">&nbsp;我的考试</a></li>
                     </ul>
                 </li>
                 <li>
@@ -422,7 +421,7 @@
                         </table> `
 
                         Mock.mock('/mockTest', {
-                    "userInfo|14": [
+                    "userInfo|10": [
                         {
                             "id|1-10":4,
                             "book|1":["计算机网络原理","软件工程原理","web前端开发","数据库原理","操作系统原理","马克思主义原理","计算机网络原理"] ,
@@ -603,27 +602,21 @@
                             case "myExams":
                                         contentHtml = `
                                         <p class='box3'>我的考试</p>
-                                        <div class="box6">暂无！</div>`
+                                          <a href="02-kaoshi.html" class="btn btn-primary">点击查看考试成绩详情</a>
+                                                <!-- 考试信息 -->
+                                                    <div class="welcome-box">
+                                                        <strong>考试信息</strong>
+                                                            <p><strong>科目：</strong>数学</p>
+                                                            <p><strong>考试时间：</strong>2024年1月15日 09:00</p>
+                                                            <p><strong>考试地点：</strong>教室101</p>
+                                                            <p><strong>考试形式：</strong>线下</p>
+                                                    </div>`
                                         break;
                             case "myFinance":
                                         contentHtml = `
-                                       <p class='box3'>财务</p>
+                                       <p class='box3'>我的财务</p>
                                         <div class="box6">注意：请仔细核对财务信息，如有错误请联系管理员。</div>
-                                        <table>
-                                            <thead >
-                                            <tr>
-                                                <th>总缴费统计</th>
-                                                <th>应缴费</th>
-                                                <th>实缴费</th>
-                                                <th>欠款</th>
-                                            </tr>
-                                                <tr>
-                                                <td>2021-01-01至2021-12-31</td>
-                                                <td>10000</td>
-                                                <td>9000</td>
-                                                <td>1000</td>
-                                            </tr>
-                                            </thead>`
+                                        <a href="03-财务.html">点击查看财务详情！</a>`
                                         break;
 
                     default:
@@ -903,7 +896,7 @@
             background-color: #bbd0a6;
             width: 250px;
             height: 250px;
-            border-radius: 2px;
+            border-radius: 7px;
             border: solid 1px #ccc;
             margin-bottom: 20px;
             color: #4a4a4a;
@@ -915,11 +908,11 @@
         }
         .box3 {
             border: #7fc470 solid 1px;
-            padding: 10px;
+            padding: 5px;
             width: 100px;
             text-align: center;
             border-radius: 30px;
-            margin-bottom: 20px;
+            margin-bottom: 5px;
             color: #4a4a4a;
         }
         .box4 input[type="text"] {
@@ -1050,7 +1043,7 @@
         .user_menu p:hover {
             background-color: #c09de5; 
         }
-        .container {
+        .container1 {
             display: flex;
             height: calc(100vh - 60px); 
         }

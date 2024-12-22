@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学生管理系统 - 财务页面</title>
+    <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(45deg, #d1e7dd, #fff3cd);
+            font-family: 'Arial', sans-serif;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        h2 {
+            font-weight: bold;
+            color: #155724;
+        }
+
+        .btn {
+            border-radius: 20px;
+        }
+
+        .table th,
+        .table td {
+            vertical-align: middle;
+        }
+
+        .modal-header {
+            background-color: #d1e7dd;
+            color: #155724;
+        }
+
+        .modal-footer .btn {
+            border-radius: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h3 class="text-center my-4">学生管理系统 - 财务页面</h3>
+        <a href="02-登陆成功的页面.html" class="btn btn-primary mb-4 btn-sm">返回主页</a>
+
+        <!-- 财务展示表格 -->
+        <table class="table table-striped my-4" id="financeTable">
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>学生姓名</th>
+                    <th>费用类型</th>
+                    <th>金额</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+        <!-- 添加/修改财务记录模态窗口 -->
+        <div class="modal fade" id="financeModal" tabindex="-1" aria-labelledby="financeModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="financeModalLabel">添加财务记录</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="financeForm">
+                            <div class="form-group">
+                                <label for="studentName">学生姓名</label>
+                                <input type="text" class="form-control" id="studentName" placeholder="请输入学生姓名" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="feeType">费用类型</label>
+                                <input type="text" class="form-control" id="feeType" placeholder="请输入费用类型" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="amount">金额</label>
+                                <input type="number" class="form-control" id="amount" placeholder="请输入金额" min="0" required>
+                            </div>
+                            <input type="hidden" id="editIndex">
+                            <br>
+                            <button type="submit" class="btn btn-primary">保存记录</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-success my-2" data-bs-toggle="modal" data-bs-target="#financeModal"> + 添加财务记录</button>
+    </div>
+
+    <script src="jquery-3.6.0.min.js"></script>
+    <script src="bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            let editedRow;
+
+            // 初始化虚拟数据
+            const financeData = [
+                { studentName: "张三", feeType: "学费", amount: 2000 },
+                { studentName: "李四", feeType: "书籍费", amount: 300 },
+                { studentName: "王五", feeType: "住宿费", amount: 1500 },
+                { studentName: "赵六", feeType: "咖啡费", amount: 50 },
+            ];
+
+            // 添加虚拟数据到表格中
+            financeData.forEach(function (data, index) {
+                const newRow = $('<tr></tr>');
+                newRow.append($('<td>' + (index + 1) + '</td>'));
+                newRow.append($('<td>' + data.studentName + '</td>'));
+                newRow.append($('<td>' + data.feeType + '</td>'));
+                newRow.append($('<td>' + data.amount + '</td>'));
+
+                // 添加操作按钮
+                newRow.append($('<td></td>').append(
+                    $('<button class="btn btn-warning btn-sm me-2 editBtn"><i class="fas fa-edit"></i> 修改</button>').click(function () {
+                        editedRow = newRow;
+                        $('#studentName').val(data.studentName);
+                        $('#feeType').val(data.feeType);
+                        $('#amount').val(data.amount);
+                        $('#editIndex').val(index + 1);
+                        $('#financeModalLabel').text('修改记录');
+                        $('#financeModal').modal('show');
+                    }),
+                    $('<button class="btn btn-danger btn-sm deleteBtn"><i class="fas fa-trash-alt"></i> 删除</button>').click(function () {
+                        newRow.remove();
+                        updateIndexes();
+                    })
+                ));
+
+                $('#financeTable tbody').append(newRow);
+            });
+
+            $('#financeForm').submit(function (e) {
+                e.preventDefault();
+
+                const studentName = $('#studentName').val();
+                const feeType = $('#feeType').val();
+                const amount = $('#amount').val();
+                const index = $('#editIndex').val();
+
+                if (index) {
+                    // 编辑现有行
+                    editedRow.find('td:eq(1)').text(studentName);
+                    editedRow.find('td:eq(2)').text(feeType);
+                    editedRow.find('td:eq(3)').text(amount);
+                    
+                    // 清空编辑状态
+                    $('#editIndex').val('');
+                    editedRow = null;
+                } else {
+                    // 创建新行
+                    const newIndex = $('#financeTable tbody tr').length + 1;
+                    const newRow = $('<tr></tr>');
+                    newRow.append($('<td>' + newIndex + '</td>'));
+                    newRow.append($('<td>' + studentName + '</td>'));
+                    newRow.append($('<td>' + feeType + '</td>'));
+                    newRow.append($('<td>' + amount + '</td>'));
+
+                    // 添加操作按钮
+                    newRow.append($('<td></td>').append(
+                        $('<button class="btn btn-warning btn-sm me-2 editBtn"><i class="fas fa-edit"></i> 修改</button>').click(function () {
+                            editedRow = newRow;
+                            $('#studentName').val(studentName);
+                            $('#feeType').val(feeType);
+                            $('#amount').val(amount);
+                            $('#editIndex').val(newIndex);
+                            $('#financeModalLabel').text('修改记录');
+                            $('#financeModal').modal('show');
+                        }),
+                        $('<button class="btn btn-danger btn-sm deleteBtn"><i class="fas fa-trash-alt"></i> 删除</button>').click(function () {
+                            newRow.remove();
+                            updateIndexes();
+                        })
+                    ));
+
+                    $('#financeTable tbody').append(newRow);
+                }
+
+                // 清空表单输入框
+                $('#financeForm')[0].reset();
+                $('#financeModal').modal('hide');
+                updateIndexes();
+            });
+
+            function updateIndexes() {
+                $('#financeTable tbody tr').each(function (index) {
+                    $(this).find('td:eq(0)').text(index + 1);
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

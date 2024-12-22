@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学生成绩管理系统 - 成绩页面</title>
+    <!-- 引入Bootstrap CSS -->
+    <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(45deg, #9ccc7f, #f7e5f6);
+            font-family: 'Arial', sans-serif;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        h2 {
+            font-weight: bold;
+            color: #3c763d;
+        }
+
+        .btn {
+            border-radius: 20px;
+        }
+
+        .table th,
+        .table td {
+            vertical-align: middle;
+        }
+
+        .modal-header {
+            background-color: #9ccc7f;
+            color: white;
+        }
+
+        .modal-footer .btn {
+            border-radius: 20px;
+        }
+
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 40vh;
+            width: 80vw;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(156, 200, 127, 0.5);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h3 class="text-center my-4">学生成绩管理系统 - 成绩页面</h3>
+        <a href="02-登陆成功的页面.html" class="btn btn-primary mb-4 btn-sm">返回主页</a>
+
+        <!-- 成绩曲线图 -->
+        <div class="chart-container">
+            <canvas id="scoreChart"></canvas>
+        </div>
+
+        <!-- 成绩展示表格 -->
+        <table class="table table-striped my-4" id="scoreTable">
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>学生姓名</th>
+                    <th>课程名称</th>
+                    <th>成绩</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+        <!-- 添加/修改成绩模态窗口 -->
+        <div class="modal fade" id="scoreModal" tabindex="-1" aria-labelledby="scoreModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="scoreModalLabel">添加成绩</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="scoreForm">
+                            <div class="form-group">
+                                <label for="studentName">学生姓名</label>
+                                <input type="text" class="form-control" id="studentName" placeholder="请输入学生姓名" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="course">课程名称</label>
+                                <input type="text" class="form-control" id="course" placeholder="请输入课程名称" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="score">成绩</label>
+                                <input type="number" class="form-control" id="score" placeholder="请输入成绩" min="0" max="100" required>
+                            </div>
+                            <input type="hidden" id="editIndex">
+                            <br>
+                            <button type="submit" class="btn btn-primary">保存成绩</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-success my-2" data-bs-toggle="modal" data-bs-target="#scoreModal"> + 添加成绩</button>
+
+        
+    </div>
+
+    <!-- 引入jQuery和Bootstrap的JavaScript文件 -->
+    <script src="jquery-3.6.0.min.js"></script>
+    <script src="bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            let editedRow;
+
+            // 初始化虚拟数据
+            const scoreData = [
+                { studentName: "张三", course: "数学", score: 85 },
+                { studentName: "李四", course: "语文", score: 86 },
+                { studentName: "王五", course: "英语", score: 92 },
+                { studentName: "赵六", course: "物理", score: 83 },
+                { studentName: "钱七", course: "化学", score: 88 },
+                { studentName: "孙八", course: "生物", score: 95 },
+                { studentName: "周九", course: "历史", score: 81 },
+                { studentName: "吴十", course: "地理", score: 83 },
+            ];
+
+            // 添加虚拟数据到表格中
+            scoreData.forEach(function (data, index) {
+                const newRow = $('<tr></tr>');
+                newRow.append($('<td>' + (index + 1) + '</td>'));
+                newRow.append($('<td>' + data.studentName + '</td>'));
+                newRow.append($('<td>' + data.course + '</td>'));
+                newRow.append($('<td>' + data.score + '</td>'));
+
+                // 添加操作按钮
+                newRow.append($('<td></td>').append(
+                    $('<button class="btn btn-warning btn-sm me-2 editBtn"><i class="fas fa-edit"></i> 修改</button>').click(function () {
+                        editedRow = newRow;
+                        $('#studentName').val(data.studentName);
+                        $('#course').val(data.course);
+                        $('#score').val(data.score);
+                        $('#editIndex').val(index + 1);
+                        $('#scoreModalLabel').text('修改成绩');
+                        $('#scoreModal').modal('show');
+                    }),
+                    $('<button class="btn btn-danger btn-sm deleteBtn"><i class="fas fa-trash-alt"></i> 删除</button>').click(function () {
+                        newRow.remove();
+                        updateIndexes();
+                        updateChart();
+                    })
+                ));
+
+                $('#scoreTable tbody').append(newRow);
+            });
+
+            $('#scoreForm').submit(function (e) {
+                e.preventDefault();
+
+                const studentName = $('#studentName').val();
+                const course = $('#course').val();
+                const score = $('#score').val();
+                const index = $('#editIndex').val();
+
+                if (index) {
+                    // 编辑现有行
+                    editedRow.find('td:eq(1)').text(studentName);
+                    editedRow.find('td:eq(2)').text(course);
+                    editedRow.find('td:eq(3)').text(score);
+                    
+                    // 清空编辑状态
+                    $('#editIndex').val('');
+                    editedRow = null;
+                } else {
+                    // 创建新行
+                    const newIndex = $('#scoreTable tbody tr').length + 1;
+                    const newRow = $('<tr></tr>');
+                    newRow.append($('<td>' + newIndex + '</td>'));
+                    newRow.append($('<td>' + studentName + '</td>'));
+                    newRow.append($('<td>' + course + '</td>'));
+                    newRow.append($('<td>' + score + '</td>'));
+
+                    // 添加操作按钮
+                    newRow.append($('<td></td>').append(
+                        $('<button class="btn btn-warning btn-sm me-2 editBtn"><i class="fas fa-edit"></i> 修改</button>').click(function () {
+                            editedRow = newRow;
+                            $('#studentName').val(studentName);
+                            $('#course').val(course);
+                            $('#score').val(score);
+                            $('#editIndex').val(newIndex);
+                            $('#scoreModalLabel').text('修改成绩');
+                            $('#scoreModal').modal('show');
+                        }),
+                        $('<button class="btn btn-danger btn-sm deleteBtn"><i class="fas fa-trash-alt"></i> 删除</button>').click(function () {
+                            newRow.remove();
+                            updateIndexes();
+                            updateChart();
+                        })
+                    ));
+
+                    $('#scoreTable tbody').append(newRow);
+                }
+
+                // 清空表单输入框
+                $('#scoreForm')[0].reset();
+                $('#scoreModal').modal('hide');
+                updateIndexes();
+                updateChart();
+            });
+
+            function updateIndexes() {
+                $('#scoreTable tbody tr').each(function (index) {
+                    $(this).find('td:eq(0)').text(index + 1);
+                });
+            }
+
+            // 曲线图配置
+            const ctx = document.getElementById('scoreChart').getContext('2d');
+            const scoreChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: scoreData.map(data => data.studentName),
+                    datasets: [{
+                        label: '学生成绩',
+                        data: scoreData.map(data => data.score),
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: '学生成绩曲线图'
+                        }
+                    }
+                }
+            });
+
+            function updateChart() {
+                scoreChart.data.datasets[0].data = $('#scoreTable tbody tr').map(function() {
+                    return parseFloat($(this).find('td:eq(3)').text() || 0);
+                }).get();
+                scoreChart.update();
+            }
+        });
+    </script>
+</body>
+
+</html>
