@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统公告</title>
+    <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script> 
+    <script src="bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            padding-top: 20px;
+            background: #bcceb1;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            background-color: #007bff; /* 导航栏背景颜色 */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 导航栏阴影 */
+        }
+        .navbar-brand {
+            color: #fff; /* 导航栏品牌文字颜色 */
+        }
+        .container {
+            background: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .list-group-item {
+            display: flex;
+            align-items: center;
+            transition: background-color 0.2s;
+            border-radius: 5px;
+        }
+        .list-group-item:hover {
+            background-color: #e2e3e5;
+        }
+        .list-group-item i {
+            margin-right: 10px;
+            color: #007bff; /* Bootstrap的primary颜色 */
+        }
+        .modal-header {
+            background-color: #007bff;
+            color: white;
+        }
+        .modal-body {
+            background-color: #f1f1f1;
+        }
+        .alert {
+            background-color: #bce2b6; /* 通知背景颜色 */
+            color: #155724; /* 通知文字颜色 */
+        }
+        .card {
+            border: none; /* 去掉卡片边框 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 卡片阴影效果 */
+            margin-bottom: 20px;
+        }
+        .card-title {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="text-center">系统公告</h1>
+    <p class="text-center">欢迎查看学校最新公告，确保您不会错过任何重要信息。</p>
+    
+    <div class="back-to-login "><a href="02-登陆成功的页面.html" class="btn btn-link">返回</a></div>
+
+    <div class="alert alert-success text-center mt-3" role="alert">
+        最新通知：2024年春季学期选课已经开始，请同学们及时登录系统选课。
+    </div>
+
+    <div class="announcement-details">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">近期活动</h5>
+                <p class="card-text">我们将在下周举行校园活动，欢迎大家积极参与！更多信息请关注公告栏。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="list-group mt-4">
+        <a href="#" class="list-group-item list-group-item-action" data-bs-toggle="modal" data-bs-target="#announcementDetailModal" data-title="公告标题 1" data-content="食堂开张啦！我们为您准备了丰盛的菜肴！">
+            <i class="fas fa-bullhorn"></i> 食堂开张公告
+        </a>
+        <a href="#" class="list-group-item list-group-item-action" data-bs-toggle="modal" data-bs-target="#announcementDetailModal" data-title="公告标题 2" data-content="学校放假啦！放假时间为12月24日至1月1日。">
+            <i class="fas fa-bullhorn"></i> 放假公告
+        </a>
+        <a href="#" class="list-group-item list-group-item-action" data-bs-toggle="modal" data-bs-target="#announcementDetailModal" data-title="公告标题 3" data-content="课程结束啦！请同学们及时完成作业。">
+            <i class="fas fa-bullhorn"></i> 课程结束公告
+        </a>
+    </div>
+</div>
+
+<!-- 公告详情模态框 -->
+<div class="modal fade" id="announcementDetailModal" tabindex="-1" role="dialog" aria-labelledby="announcementDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="announcementDetailModalLabel">公告标题</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                公告内容
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // jQuery 事件处理，打开模态框时填充数据
+    $('#announcementDetailModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // 获取触发模态框的按钮
+        var title = button.data('title'); // 获取公告标题
+        var content = button.data('content'); // 获取公告内容
+
+        var modal = $(this);
+        modal.find('.modal-title').text(title); // 设置模态框标题
+        modal.find('.modal-body').text(content); // 设置模态框内容
+    });
+</script>
+
+</body>
+</html>
